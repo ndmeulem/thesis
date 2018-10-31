@@ -1,0 +1,400 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis") 
+  # Je moet gewone slashes gebruiken en geen backslashes
+controle = read.csv2(file = "tabel1_controle.csv", header = TRUE, fill = TRUE)
+fmlp = read.csv2(file = "tabel2_fMLP.csv", header = TRUE, fill = TRUE)
+cxcl1 = read.csv2(file = "tabel3_CXCL1.csv", header = TRUE, fill = TRUE)
+cxcl1 = cxcl1[-c(10, 11, 12),]
+cxcl1 = cxcl1[,-11]
+cxcl8 = read.csv2(file = "tabel4_CXCL8.csv", header = TRUE, fill = TRUE)
+
+meanspeed1 = controle[,"mean_cell_speed"]
+meanspeed2 = fmlp[,"mean_cell_speed"]
+meanspeed3 = cxcl1[,"mean_cell_speed"]
+meanspeed4 = cxcl8[,"mean_cell_speed"]
+
+acc_euc_dist1 = controle[,"accumulated_euclidian_distance"]
+acc_euc_dist2 = fmlp[,"accumulated_euclidian_distance"]
+acc_euc_dist3 = cxcl1[,"accumulated_euclidian_distance"]
+acc_euc_dist4 = cxcl8[,"accumulated_euclidian_distance"]
+
+acc_euc_dist1 = as.numeric(as.character(acc_euc_dist1))
+acc_euc_dist2 = as.numeric(as.character(acc_euc_dist2))
+acc_euc_dist3 = as.numeric(as.character(acc_euc_dist3))
+acc_euc_dist4 = as.numeric(as.character(acc_euc_dist4))
+
+meanspeed1 = as.numeric(as.character(meanspeed1))
+#je moet factor naar numerische woorden omzetten, als je echter enkel as.numeric gebruikt zet hij het om in 1, 2, 3,
+  #en niet in de originele waarden, hiermee lukt het wel
+meanspeed2 = as.numeric(as.character(meanspeed2))
+meanspeed3 = as.numeric(as.character(meanspeed3))
+meanspeed4 = as.numeric(as.character(meanspeed4))
+
+acc_dist1 = controle[,"accumulated_distance"]
+acc_dist2 = fmlp[,"accumulated_distance"]
+acc_dist3 = cxcl1[,"accumulated_distance"]
+acc_dist4 = cxcl8[,"accumulated_distance"]
+
+acc_dist1 = as.numeric(as.character(acc_dist1))
+acc_dist2 = as.numeric(as.character(acc_dist2))
+acc_dist3 = as.numeric(as.character(acc_dist3))
+acc_dist4 = as.numeric(as.character(acc_dist4))
+
+stdev_velo1 = controle[,"stdev_cell_velocity"]
+stdev_velo2 = fmlp[,"stdev_cell_velocity"]
+stdev_velo3 = cxcl1[,"stdev_cell_velocity"]
+stdev_velo4 = cxcl8[,"stdev_cell_velocity"]
+
+stdev_velo1 = as.numeric(as.character(stdev_velo1))
+stdev_velo2 = as.numeric(as.character(stdev_velo2))
+stdev_velo3 = as.numeric(as.character(stdev_velo3))
+stdev_velo4 = as.numeric(as.character(stdev_velo4))
+
+direct1 = controle[,"cell_paths_average_directness"]
+direct2 = fmlp[,"cell_paths_average_directness"]
+direct3 = cxcl1[,"cell_paths_average_directness"]
+direct4 = cxcl8[,"cell_paths_average_directness"]
+
+direct1 = as.numeric(as.character(direct1))
+direct2 = as.numeric(as.character(direct2))
+direct3 = as.numeric(as.character(direct3))
+direct4 = as.numeric(as.character(direct4))
+
+centerx1 = controle[,"center_of_mass_displacement_CoM.X"]
+centerx2 = fmlp[,"center_of_mass_displacement_CoM.X"]
+centerx3 = cxcl1[,"center_of_mass_displacement_CoM.X"]
+centerx4 = cxcl8[,"center_of_mass_displacement_CoM.X"]
+
+centerx1 = as.numeric(as.character(centerx1))
+centerx2 = as.numeric(as.character(centerx2))
+centerx3 = as.numeric(as.character(centerx3))
+centerx4 = as.numeric(as.character(centerx4))
+
+centery1 = controle[,"center_of_mass_displacement_CoM.Y"]
+centery2 = fmlp[,"center_of_mass_displacement_CoM.Y"]
+centery3 = cxcl1[,"center_of_mass_displacement_CoM.Y"]
+centery4 = cxcl8[,"center_of_mass_displacement_CoM.Y"]
+
+centery1 = as.numeric(as.character(centery1))
+centery2 = as.numeric(as.character(centery2))
+centery3 = as.numeric(as.character(centery3))
+centery4 = as.numeric(as.character(centery4))
+
+migrationx1 = controle[,"forward_migration_index_X"]
+migrationx2 = fmlp[,"forward_migration_index_X"]
+migrationx3 = cxcl1[,"forward_migration_index_X"]
+migrationx4 = cxcl8[,"forward_migration_index_X"]
+
+migrationx1 = as.numeric(as.character(migrationx1))
+migrationx2 = as.numeric(as.character(migrationx2))
+migrationx3 = as.numeric(as.character(migrationx3))
+migrationx4 = as.numeric(as.character(migrationx4))
+
+migrationy1 = controle[,"forward_migration_index_Y"]
+migrationy2 = fmlp[,"forward_migration_index_Y"]
+migrationy3 = cxcl1[,"forward_migration_index_Y"]
+migrationy4 = cxcl8[,"forward_migration_index_Y"]
+
+migrationy1 = as.numeric(as.character(migrationy1))
+migrationy2 = as.numeric(as.character(migrationy2))
+migrationy3 = as.numeric(as.character(migrationy3))
+migrationy4 = as.numeric(as.character(migrationy4))
+
+lijst = list(meanspeed1, meanspeed2, meanspeed3, meanspeed4, acc_dist1, acc_dist2, acc_dist3, acc_dist4, acc_euc_dist1,
+acc_euc_dist2, acc_euc_dist3, acc_euc_dist4, stdev_velo1, stdev_velo2, stdev_velo3, stdev_velo4, direct1, direct2,
+direct3, direct4, centerx1, centerx2, centerx3, centerx4, centery1, centery2, centery3, centery4, migrationx1,
+migrationx2, migrationx3, migrationx4, migrationy1, migrationy2, migrationy3, migrationy4)
+
+
+#statistical summary
+summary(meanspeed1)
+summary(meanspeed2)
+summary(meanspeed3)
+summary(meanspeed4)
+
+#density plots
+
+install.packages("Hmisc")
+library(Hmisc)
+install.packages("UsingR")
+library(UsingR)
+simple.hist.and.boxplot(meanspeed1, main = "Control condition")
+simple.hist.and.boxplot(meanspeed2, main = "fmlp")
+
+plot(density(meanspeed1))    
+      Kernel density plot
+plot(density(meanspeed2))
+plot(density(meanspeed3))
+plot(density(meanspeed4))
+
+#skewness
+install.packages("moments")
+library(moments)
+
+skewness(meanspeed1)
+skewness(meanspeed2)
+skewness(meanspeed3)
+skewness(meanspeed4)
+
+
+for (element in lijst){
+ hist(element, breaks = 10)}
+    
+#histograms
+hist(migrationx1)
+hist(migrationx2)
+
+hist(stdev_velo1)
+hist(stdev_velo2)
+hist(stdev_velo3)
+hist(stdev_velo4)
+
+hist(meanspeed1, breaks = 10)
+hist(meanspeed2, breaks = 10)
+hist(meanspeed3, breaks = 10)
+hist(meanspeed4, breaks = 10)
+hist(acc_euc_dist1, breaks = 10)
+hist(acc_euc_dist2, breaks = 10)
+
+plot(migrationx1, migrationy1)
+
+
+#test for normality
+qqnorm(stdev_velo1, main = "control")
+qqline(stdev_velo1)
+
+qqnorm(stdev_velo2, main = "fmlp")
+qqline(stdev_velo2)
+
+qqnorm(stdev_velo3, main = "cxcl1")
+qqline(stdev_velo3)
+
+qqnorm(stdev_velo4, main = "cxcl8")
+qqline(stdev_velo4)
+
+qqnorm(centerx1, main = "control")
+qqline(centerx1)
+
+qqnorm(meanspeed1, main = "control")
+qqline(meanspeed1)
+
+qqnorm(meanspeed2, main = "fmlp")
+qqline(meanspeed2)
+
+qqnorm(meanspeed3, main = "cxcl1")
+qqline(meanspeed3)
+
+qqnorm(meanspeed4, main = "cxcl8")
+qqline(meanspeed4)
+
+shapiro.test(meanspeed1)
+shapiro.test(meanspeed2)
+shapiro.test(meanspeed3)
+shapiro.test(meanspeed4)
+shapiro.test(centerx1)
+#The null hypothesis for this test is that the data are normally distributed. The Prob < W value listed in the output #is the p-value. If the chosen alpha level is 0.05 and the p-value is less than 0.05, then the null hypothesis that #the data are normally distributed is rejected.
+
+#add status column to dataframes:
+controle[,"status"] = c("healthy", "healthy", "healthy", "mild", "mild", "mild", "severe", "severe", "severe")
+status1 = controle[,"status"]
+
+fmlp[,"status"] = c("healthy", "healthy", "healthy", "mild", "mild", "mild", "severe", "severe", "severe")
+status2 = fmlp[,"status"]
+
+cxcl1[,"status"] = c("healthy", "healthy", "healthy", "mild", "mild", "mild", "severe", "severe", "severe")
+status3 = cxcl1[,"status"]
+
+cxcl8[,"status"] = c("healthy", "healthy", "healthy", "mild", "mild", "mild", "severe", "severe", "severe")
+status4 = cxcl8[,"status"]
+
+#anova with different groups (healthy, mild and severe):
+#is het gemiddelde van parameter x (binnen dezelfde treatment) verschillend tussen de verschillende statussen?
+  #meanspeed
+
+res.aov = aov(meanspeed1~status1)  #~: om te groeperen per groep/status
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(meanspeed2~status2)
+summary(res.aov) #nu zijn de means wel significant verschillend
+TukeyHSD(res.aov) #ze zijn allemaal significant verschillend van elkaar
+#Tukey HSD (Tukey Honest Significant Differences, R function: TukeyHSD()) for performing multiple pairwise-comparison between the means of groups. Om te weten welke means precies significant verschillend zijn
+#http://www.sthda.com/english/wiki/one-way-anova-test-in-r
+
+res.aov = aov(meanspeed3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(meanspeed4~status4)
+summary(res.aov)  # p = 0.05
+
+  #accumulated distance
+
+res.aov = aov(acc_dist1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(acc_dist2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(acc_dist3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(acc_dist4~status4)
+summary(res.aov)  # p < 0.05 : wel significant verschillend
+
+  #accumulated euclidian distance
+  
+res.aov = aov(acc_euc_dist1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(acc_euc_dist2~status2)
+summary(res.aov) #de p-value is < 0.05: de means zijn wel significant verschillend
+
+res.aov = aov(acc_euc_dist3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(acc_euc_dist4~status4)
+summary(res.aov)  # p < 0.05 : wel significant verschillend
+
+  #center of mass displacement: X
+
+res.aov = aov(centerx1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(centerx2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(centerx3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(centerx4~status4)
+summary(res.aov)  # p > 0.05 
+
+  #center of mass displacement: Y
+  
+res.aov = aov(centery1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(centery2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(centery3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(centery4~status4)
+summary(res.aov)  # p > 0.05 
+
+  #cell paths average directness
+  
+res.aov = aov(direct1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(direct2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(direct3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(direct4~status4)
+summary(res.aov)  # p > 0.05 
+
+  #forward migration index: X
+
+res.aov = aov(migrationx1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(migrationx2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(migrationx3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(migrationx4~status4)
+summary(res.aov)  # p > 0.05 
+
+  #forward migration index: Y
+  
+res.aov = aov(migrationy1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(migrationy2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(migrationy3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(migrationy4~status4)
+summary(res.aov)  # p > 0.05 
+
+  #standard deviation velocity
+  
+res.aov = aov(stdev_velo1~status1)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(stdev_velo2~status2)
+summary(res.aov) #de p-value is > 0.05: de means zijn niet significant verschillend
+
+res.aov = aov(stdev_velo3~status3)
+summary(res.aov)  # p > 0.05
+
+res.aov = aov(stdev_velo4~status4)
+summary(res.aov)  # p > 0.05 
+
+#boxplots
+
+boxplot(centerx1, centerx2, centerx3, centerx4, main = "center of mass displacement: X")
+boxplot(centery1, centery2, centery3, centery4, main = "center of mass displacement: Y")
+boxplot(direct1, direct2, direct3, direct4, main = "cell paths average directness")
+boxplot(migrationx1, migrationx2, migrationx3, migrationx4,main = "forward migration index X")
+boxplot(migrationy1, migrationy2, migrationy3, migrationy4,main = "forward migration index Y")
+boxplot(acc_dist1, acc_dist2, acc_dist3, acc_dist4, main = "Accumulated distance")
+boxplot(acc_euc_dist1, acc_euc_dist2, acc_euc_dist3, acc_euc_dist4, main = "Accumulated euclidian distance")
+boxplot(stdev_velo1, stdev_velo2, stdev_velo3, stdev_velo4, main = "st_dev of cell velocity", 
+names = c("control", "fmlp", "cxcl1", "cxcl8"))
+boxplot(migrationx1, migrationx2, migrationx3, migrationx4, main = "migration index X", names = c("control", "fmlp", "cxcl1", "cxcl8"))
+boxplot(direct1, direct2, direct3, direct4, main = "average directness", names = c("control", "fmlp", "cxcl1", "cxcl8"))
+boxplot(acc_euc_dist1, acc_euc_dist2, acc_euc_dist3, acc_euc_dist4, main = "accumulated euclidian distance")
+boxplot(meanspeed1, meanspeed2, meanspeed3, meanspeed4, main = "mean speeds", names = c("control", "fmlp", "cxcl1", "cxcl8"))
+
+#(pairwise) anova with different treatments
+#zijn de gemiddeldes van parameter x van eenzelfde patientstatus (gezond, mild, ernstig) tussen de verschillende #treatments significant verschillend?
+meanspeed1[1:3]
+
+res.aov(meanspeed1[1:3], meanspeed2[1:3], meanspeed3[1:3], meanspeed4[1:3])
+
+help(aov)
+
+#niet parametrische tegenhanger van ANOVA
+
+#two way ANOVA voor te testen op treatment en status (ook paired dan?)
+#zie curus bio-informatica blz 39-40
+#treatment is een factor met vier levels
+#status is een factor met drie levels
+
+#nieuwe dataset voor two-way anova:
+#meanspeed
+
+treatment = c(replicate(9, "control"), replicate(9, "fmlp"), replicate(9, "cxcl1"), replicate(9, "cxcl8"))
+statusdf = c(replicate(3, "healthy"), replicate(3, "mild"), replicate(3, "severe"), replicate(3, "healthy"), replicate(3, "mild"), replicate(3, "severe"), replicate(3, "healthy"), replicate(3, "mild"), replicate(3, "severe"), replicate(3, "healthy"), replicate(3, "mild"), replicate(3, "severe"))
+values = c(meanspeed1, meanspeed2, meanspeed3, meanspeed4)
+df = data.frame(treatment, statusdf, values)
+
+res.aov = aov(values~treatment+statusdf)
+summary(res.aov)
