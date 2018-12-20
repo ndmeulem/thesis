@@ -1,0 +1,1317 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features1 = read.csv(file = "MDS data + features1", header = TRUE, fill = TRUE)
+features1_NAN = read.csv(file = "MDS data +features1 NAN", header = TRUE, fill = TRUE)
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#make subsets
+#per patient
+
+condition = features2[,"patientnumber"] == 122
+subset_122 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 129
+subset_129 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 164
+subset_164 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 714
+subset_714 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 722
+subset_722 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 751
+subset_751 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 805
+subset_805 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 858
+subset_858 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 859
+subset_859 = features2[condition,]
+
+#per patient per treatment
+#patient 122
+condition = subset_122[,"treatment"] == "CXCL1"
+subset_122_CXCL1 = subset_122[condition,]
+
+condition = subset_122[,"treatment"] == "CXCL8"
+subset_122_CXCL8 = subset_122[condition,]
+
+condition = subset_122[,"treatment"] == "fMLP"
+subset_122_fMLP = subset_122[condition,]
+
+condition = subset_122[,"treatment"] == "PBS"
+subset_122_PBS = subset_122[condition,]
+  
+
+
+#patient 164
+
+condition = subset_164[,"treatment"] == "CXCL1"
+subset_164_CXCL1 = subset_164[condition,]
+
+condition = subset_164[,"treatment"] == "CXCL8"
+subset_164_CXCL8 = subset_164[condition,]
+
+condition = subset_164[,"treatment"] == "fMLP"
+subset_164_fMLP = subset_164[condition,]
+
+condition = subset_164[,"treatment"] == "PBS"
+subset_164_PBS = subset_164[condition,]
+
+#patient 129
+
+condition = subset_129[,"treatment"] == "CXCL1"
+subset_129_CXCL1 = subset_129[condition,]
+
+condition = subset_129[,"treatment"] == "CXCL8"
+subset_129_CXCL8 = subset_129[condition,]
+
+condition = subset_129[,"treatment"] == "fMLP"
+subset_129_fMLP = subset_129[condition,]
+
+condition = subset_129[,"treatment"] == "PBS"
+subset_129_PBS = subset_129[condition,]
+
+#patient 714
+
+condition = subset_714[,"treatment"] == "CXCL1"
+subset_714_CXCL1 = subset_714[condition,]
+
+condition = subset_714[,"treatment"] == "CXCL8"
+subset_714_CXCL8 = subset_714[condition,]
+
+condition = subset_714[,"treatment"] == "fMLP"
+subset_714_fMLP = subset_714[condition,]
+
+condition = subset_714[,"treatment"] == "PBS"
+subset_714_PBS = subset_714[condition,]
+
+#patient 722
+
+condition = subset_722[,"treatment"] == "CXCL1"
+subset_722_CXCL1 = subset_722[condition,]
+
+condition = subset_722[,"treatment"] == "CXCL8"
+subset_722_CXCL8 = subset_722[condition,]
+
+condition = subset_722[,"treatment"] == "fMLP"
+subset_722_fMLP = subset_722[condition,]
+
+condition = subset_722[,"treatment"] == "PBS"
+subset_722_PBS = subset_722[condition,]
+
+#patient 751
+
+condition = subset_751[,"treatment"] == "CXCL1"
+subset_751_CXCL1 = subset_751[condition,]
+
+condition = subset_751[,"treatment"] == "CXCL8"
+subset_751_CXCL8 = subset_751[condition,]
+
+condition = subset_751[,"treatment"] == "fMLP"
+subset_751_fMLP = subset_751[condition,]
+
+condition = subset_751[,"treatment"] == "PBS"
+subset_751_PBS = subset_751[condition,]
+
+#patient 805
+
+condition = subset_805[,"treatment"] == "CXCL1"
+subset_805_CXCL1 = subset_805[condition,]
+
+condition = subset_805[,"treatment"] == "CXCL8"
+subset_805_CXCL8 = subset_805[condition,]
+
+condition = subset_805[,"treatment"] == "fMLP"
+subset_805_fMLP = subset_805[condition,]
+
+condition = subset_805[,"treatment"] == "PBS"
+subset_805_PBS = subset_805[condition,]
+
+#patient 858
+
+condition = subset_858[,"treatment"] == "CXCL1"
+subset_858_CXCL1 = subset_858[condition,]
+
+condition = subset_858[,"treatment"] == "CXCL8"
+subset_858_CXCL8 = subset_858[condition,]
+
+condition = subset_858[,"treatment"] == "fMLP"
+subset_858_fMLP = subset_858[condition,]
+
+condition = subset_858[,"treatment"] == "PBS"
+subset_858_PBS = subset_858[condition,]
+
+#patient 859
+
+condition = subset_859[,"treatment"] == "CXCL1"
+subset_859_CXCL1 = subset_859[condition,]
+
+condition = subset_859[,"treatment"] == "CXCL8"
+subset_859_CXCL8 = subset_859[condition,]
+
+condition = subset_859[,"treatment"] == "fMLP"
+subset_859_fMLP = subset_859[condition,]
+
+condition = subset_859[,"treatment"] == "PBS"
+subset_859_PBS = subset_859[condition,]
+
+#plots per patient en per treatment van alle features
+
+#patient 122
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_122_CXCL1[,"accumulated_distance"], breaks = 25, main = "122 - CXCL1 - accumulated distance")
+hist(subset_122_CXCL8[,"accumulated_distance"], breaks = 25, main = "122 - CXCL8 - accumulated distance")
+hist(subset_122_fMLP[,"accumulated_distance"], breaks = 25, main = "122 - fMLP - acummulated distance")
+hist(subset_122_PBS[,"accumulated_distance"], breaks = 25, main = "122 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_122_CXCL1_niet0_ad = subset(subset_122_CXCL1, accumulated_distance > 0)
+subset_122_CXCL8_niet0_ad = subset(subset_122_CXCL8, accumulated_distance > 0)
+subset_122_fMLP_niet0_ad = subset(subset_122_fMLP, accumulated_distance > 0)
+subset_122_PBS_niet0_ad = subset(subset_122_PBS, accumulated_distance > 0)
+
+hist(subset_122_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "122 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_122_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "122 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_122_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "122 - fMLP - 0 eruit - accumulated distance")
+hist(subset_122_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "122 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_122_CXCL1[,"euclidian_distance"], breaks = 25, main = "122 - CXCL1 - euclidian distance")
+hist(subset_122_CXCL8[,"euclidian_distance"], breaks = 25, main = "122 - CXCL8 - euclidian distance")
+hist(subset_122_fMLP[,"euclidian_distance"], breaks = 25, main = "122 - fMLP - euclidian distance")
+hist(subset_122_PBS[,"euclidian_distance"], breaks = 25, main = "122 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_122_CXCL1_niet0_ed = subset(subset_122_CXCL1, euclidian_distance > 0)
+subset_122_CXCL8_niet0_ed = subset(subset_122_CXCL8, euclidian_distance > 0)
+subset_122_fMLP_niet0_ed = subset(subset_122_fMLP, euclidian_distance > 0)
+subset_122_PBS_niet0_ed = subset(subset_122_PBS, euclidian_distance > 0)
+
+hist(subset_122_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "122 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_122_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "122 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_122_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "122 - fMLP - 0 eruit - euclidian distance")
+hist(subset_122_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "122 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_122_CXCL1[,"average_directness"], breaks = 25, main = "122 - CXCL1 - average_directness")
+hist(subset_122_CXCL8[,"average_directness"], breaks = 25, main = "122 - CXCL8 - average_directness")
+hist(subset_122_fMLP[,"average_directness"], breaks = 25, main = "122 - fMLP - average_directness")
+hist(subset_122_PBS[,"average_directness"], breaks = 25, main = "122 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_122_CXCL1_niet0_adi = subset(subset_122_CXCL1, average_directness > 0)
+subset_122_CXCL8_niet0_adi = subset(subset_122_CXCL8, average_directness > 0)
+subset_122_fMLP_niet0_adi = subset(subset_122_fMLP, average_directness > 0)
+subset_122_PBS_niet0_adi = subset(subset_122_PBS, average_directness > 0)
+
+hist(subset_122_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "122 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_122_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "122 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_122_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "122 - fMLP - 0 eruit -  average_directness")
+hist(subset_122_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "122 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_122_CXCL1[,"mean_speed"], breaks = 25, main = "122 - CXCL1 - mean_speed")
+hist(subset_122_CXCL8[,"mean_speed"], breaks = 25, main = "122 - CXCL8 - mean_speed")
+hist(subset_122_fMLP[,"mean_speed"], breaks = 25, main = "122 - fMLP - mean_speed")
+hist(subset_122_PBS[,"mean_speed"], breaks = 25, main = "122 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_122_CXCL1_niet0_ms = subset(subset_122_CXCL1, mean_speed > 0)
+subset_122_CXCL8_niet0_ms = subset(subset_122_CXCL8, mean_speed > 0)
+subset_122_fMLP_niet0_ms = subset(subset_122_fMLP, mean_speed > 0)
+subset_122_PBS_niet0_ms = subset(subset_122_PBS, mean_speed > 0)
+
+hist(subset_122_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "122 - CXCL1 - niet0 - mean_speed")
+hist(subset_122_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "122 - CXCL8 - niet0 - mean_speed")
+hist(subset_122_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "122 - fMLP - niet0 - mean_speed")
+hist(subset_122_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "122 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_122_CXCL1[,"stdev_velocity"], breaks = 25, main = "122 - CXCL1 - stdev_velocity")
+hist(subset_122_CXCL8[,"stdev_velocity"], breaks = 25, main = "122 - CXCL8 - stdev_velocity")
+hist(subset_122_fMLP[,"stdev_velocity"], breaks = 25, main = "122 - fMLP - stdev_velocity")
+hist(subset_122_PBS[,"stdev_velocity"], breaks = 25, main = "122 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_122_CXCL1_niet0_sv = subset(subset_122_CXCL1, stdev_velocity > 0)
+subset_122_CXCL8_niet0_sv = subset(subset_122_CXCL8, stdev_velocity > 0)
+subset_122_fMLP_niet0_sv = subset(subset_122_fMLP, stdev_velocity > 0)
+subset_122_PBS_niet0_sv = subset(subset_122_PBS, stdev_velocity > 0)
+
+hist(subset_122_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "122 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_122_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "122 - CXCL8 - niet0 stdev_velocity")
+hist(subset_122_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "122 - fMLP - niet0 - stdev_velocity")
+hist(subset_122_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "122 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_122_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "122 - CXCL1 - forward_migration_index_x")
+hist(subset_122_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "122 - CXCL8 - forward_migration_index_x")
+hist(subset_122_fMLP[,"forward_migration_index_x"], breaks = 25, main = "122 - fMLP - forward_migration_index_x")
+hist(subset_122_PBS[,"forward_migration_index_x"], breaks = 25, main = "122 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_122_CXCL1_niet0_fx = subset(subset_122_CXCL1, forward_migration_index_x != 0)
+subset_122_CXCL8_niet0_fx = subset(subset_122_CXCL8, forward_migration_index_x != 0)
+subset_122_fMLP_niet0_fx = subset(subset_122_fMLP, forward_migration_index_x != 0)
+subset_122_PBS_niet0_fx = subset(subset_122_PBS, forward_migration_index_x != 0)
+
+hist(subset_122_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "122 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_122_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "122 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_122_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "122 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_122_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "122 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_122_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "122 - CXCL1 - forward_migration_index_y")
+hist(subset_122_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "122 - CXCL8 - forward_migration_index_y")
+hist(subset_122_fMLP[,"forward_migration_index_y"], breaks = 25, main = "122 - fMLP - forward_migration_index_y")
+hist(subset_122_PBS[,"forward_migration_index_y"], breaks = 25, main = "122 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_122_CXCL1_niet0_fy = subset(subset_122_CXCL1, forward_migration_index_y != 0)
+subset_122_CXCL8_niet0_fy = subset(subset_122_CXCL8, forward_migration_index_y != 0)
+subset_122_fMLP_niet0_fy = subset(subset_122_fMLP, forward_migration_index_y != 0)
+subset_122_PBS_niet0_fy = subset(subset_122_PBS, forward_migration_index_y != 0)
+
+hist(subset_122_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "122 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_122_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "122 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_122_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "122 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_122_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "122 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+#patient 129
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_129_CXCL1[,"accumulated_distance"], breaks = 25, main = "129 - CXCL1 - accumulated distance")
+hist(subset_129_CXCL8[,"accumulated_distance"], breaks = 25, main = "129 - CXCL8 - accumulated distance")
+hist(subset_129_fMLP[,"accumulated_distance"], breaks = 25, main = "129 - fMLP - acummulated distance")
+hist(subset_129_PBS[,"accumulated_distance"], breaks = 25, main = "129 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_129_CXCL1_niet0_ad = subset(subset_129_CXCL1, accumulated_distance > 0)
+subset_129_CXCL8_niet0_ad = subset(subset_129_CXCL8, accumulated_distance > 0)
+subset_129_fMLP_niet0_ad = subset(subset_129_fMLP, accumulated_distance > 0)
+subset_129_PBS_niet0_ad = subset(subset_129_PBS, accumulated_distance > 0)
+
+hist(subset_129_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "129 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_129_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "129 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_129_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "129 - fMLP - 0 eruit - accumulated distance")
+hist(subset_129_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "129 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_129_CXCL1[,"euclidian_distance"], breaks = 25, main = "129 - CXCL1 - euclidian distance")
+hist(subset_129_CXCL8[,"euclidian_distance"], breaks = 25, main = "129 - CXCL8 - euclidian distance")
+hist(subset_129_fMLP[,"euclidian_distance"], breaks = 25, main = "129 - fMLP - euclidian distance")
+hist(subset_129_PBS[,"euclidian_distance"], breaks = 25, main = "129 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_129_CXCL1_niet0_ed = subset(subset_129_CXCL1, euclidian_distance > 0)
+subset_129_CXCL8_niet0_ed = subset(subset_129_CXCL8, euclidian_distance > 0)
+subset_129_fMLP_niet0_ed = subset(subset_129_fMLP, euclidian_distance > 0)
+subset_129_PBS_niet0_ed = subset(subset_129_PBS, euclidian_distance > 0)
+
+hist(subset_129_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "129 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_129_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "129 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_129_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "129 - fMLP - 0 eruit - euclidian distance")
+hist(subset_129_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "129 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_129_CXCL1[,"average_directness"], breaks = 25, main = "129 - CXCL1 - average_directness")
+hist(subset_129_CXCL8[,"average_directness"], breaks = 25, main = "129 - CXCL8 - average_directness")
+hist(subset_129_fMLP[,"average_directness"], breaks = 25, main = "129 - fMLP - average_directness")
+hist(subset_129_PBS[,"average_directness"], breaks = 25, main = "129 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_129_CXCL1_niet0_adi = subset(subset_129_CXCL1, average_directness > 0)
+subset_129_CXCL8_niet0_adi = subset(subset_129_CXCL8, average_directness > 0)
+subset_129_fMLP_niet0_adi = subset(subset_129_fMLP, average_directness > 0)
+subset_129_PBS_niet0_adi = subset(subset_129_PBS, average_directness > 0)
+
+hist(subset_129_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "129 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_129_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "129 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_129_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "129 - fMLP - 0 eruit -  average_directness")
+hist(subset_129_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "129 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_129_CXCL1[,"mean_speed"], breaks = 25, main = "129 - CXCL1 - mean_speed")
+hist(subset_129_CXCL8[,"mean_speed"], breaks = 25, main = "129 - CXCL8 - mean_speed")
+hist(subset_129_fMLP[,"mean_speed"], breaks = 25, main = "129 - fMLP - mean_speed")
+hist(subset_129_PBS[,"mean_speed"], breaks = 25, main = "129 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_129_CXCL1_niet0_ms = subset(subset_129_CXCL1, mean_speed > 0)
+subset_129_CXCL8_niet0_ms = subset(subset_129_CXCL8, mean_speed > 0)
+subset_129_fMLP_niet0_ms = subset(subset_129_fMLP, mean_speed > 0)
+subset_129_PBS_niet0_ms = subset(subset_129_PBS, mean_speed > 0)
+
+hist(subset_129_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "129 - CXCL1 - niet0 - mean_speed")
+hist(subset_129_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "129 - CXCL8 - niet0 - mean_speed")
+hist(subset_129_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "129 - fMLP - niet0 - mean_speed")
+hist(subset_129_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "129 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_129_CXCL1[,"stdev_velocity"], breaks = 25, main = "129 - CXCL1 - stdev_velocity")
+hist(subset_129_CXCL8[,"stdev_velocity"], breaks = 25, main = "129 - CXCL8 - stdev_velocity")
+hist(subset_129_fMLP[,"stdev_velocity"], breaks = 25, main = "129 - fMLP - stdev_velocity")
+hist(subset_129_PBS[,"stdev_velocity"], breaks = 25, main = "129 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_129_CXCL1_niet0_sv = subset(subset_129_CXCL1, stdev_velocity > 0)
+subset_129_CXCL8_niet0_sv = subset(subset_129_CXCL8, stdev_velocity > 0)
+subset_129_fMLP_niet0_sv = subset(subset_129_fMLP, stdev_velocity > 0)
+subset_129_PBS_niet0_sv = subset(subset_129_PBS, stdev_velocity > 0)
+
+hist(subset_129_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "129 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_129_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "129 - CXCL8 - niet0 stdev_velocity")
+hist(subset_129_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "129 - fMLP - niet0 - stdev_velocity")
+hist(subset_129_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "129 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_129_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "129 - CXCL1 - forward_migration_index_x")
+hist(subset_129_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "129 - CXCL8 - forward_migration_index_x")
+hist(subset_129_fMLP[,"forward_migration_index_x"], breaks = 25, main = "129 - fMLP - forward_migration_index_x")
+hist(subset_129_PBS[,"forward_migration_index_x"], breaks = 25, main = "129 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_129_CXCL1_niet0_fx = subset(subset_129_CXCL1, forward_migration_index_x != 0)
+subset_129_CXCL8_niet0_fx = subset(subset_129_CXCL8, forward_migration_index_x != 0)
+subset_129_fMLP_niet0_fx = subset(subset_129_fMLP, forward_migration_index_x != 0)
+subset_129_PBS_niet0_fx = subset(subset_129_PBS, forward_migration_index_x != 0)
+
+hist(subset_129_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "129 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_129_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "129 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_129_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "129 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_129_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "129 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_129_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "129 - CXCL1 - forward_migration_index_y")
+hist(subset_129_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "129 - CXCL8 - forward_migration_index_y")
+hist(subset_129_fMLP[,"forward_migration_index_y"], breaks = 25, main = "129 - fMLP - forward_migration_index_y")
+hist(subset_129_PBS[,"forward_migration_index_y"], breaks = 25, main = "129 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_129_CXCL1_niet0_fy = subset(subset_129_CXCL1, forward_migration_index_y != 0)
+subset_129_CXCL8_niet0_fy = subset(subset_129_CXCL8, forward_migration_index_y != 0)
+subset_129_fMLP_niet0_fy = subset(subset_129_fMLP, forward_migration_index_y != 0)
+subset_129_PBS_niet0_fy = subset(subset_129_PBS, forward_migration_index_y != 0)
+
+hist(subset_129_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "129 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_129_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "129 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_129_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "129 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_129_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "129 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+
+#Patient 164
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_164_CXCL1[,"accumulated_distance"], breaks = 25, main = "164 - CXCL1 - accumulated distance")
+hist(subset_164_CXCL8[,"accumulated_distance"], breaks = 25, main = "164 - CXCL8 - accumulated distance")
+hist(subset_164_fMLP[,"accumulated_distance"], breaks = 25, main = "164 - fMLP - acummulated distance")
+hist(subset_164_PBS[,"accumulated_distance"], breaks = 25, main = "164 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_164_CXCL1_niet0_ad = subset(subset_164_CXCL1, accumulated_distance > 0)
+subset_164_CXCL8_niet0_ad = subset(subset_164_CXCL8, accumulated_distance > 0)
+subset_164_fMLP_niet0_ad = subset(subset_164_fMLP, accumulated_distance > 0)
+subset_164_PBS_niet0_ad = subset(subset_164_PBS, accumulated_distance > 0)
+
+hist(subset_164_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "164 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_164_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "164 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_164_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "164 - fMLP - 0 eruit - accumulated distance")
+hist(subset_164_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "164 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_164_CXCL1[,"euclidian_distance"], breaks = 25, main = "164 - CXCL1 - euclidian distance")
+hist(subset_164_CXCL8[,"euclidian_distance"], breaks = 25, main = "164 - CXCL8 - euclidian distance")
+hist(subset_164_fMLP[,"euclidian_distance"], breaks = 25, main = "164 - fMLP - euclidian distance")
+hist(subset_164_PBS[,"euclidian_distance"], breaks = 25, main = "164 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_164_CXCL1_niet0_ed = subset(subset_164_CXCL1, euclidian_distance > 0)
+subset_164_CXCL8_niet0_ed = subset(subset_164_CXCL8, euclidian_distance > 0)
+subset_164_fMLP_niet0_ed = subset(subset_164_fMLP, euclidian_distance > 0)
+subset_164_PBS_niet0_ed = subset(subset_164_PBS, euclidian_distance > 0)
+
+hist(subset_164_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "164 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_164_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "164 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_164_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "164 - fMLP - 0 eruit - euclidian distance")
+hist(subset_164_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "164 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_164_CXCL1[,"average_directness"], breaks = 25, main = "164 - CXCL1 - average_directness")
+hist(subset_164_CXCL8[,"average_directness"], breaks = 25, main = "164 - CXCL8 - average_directness")
+hist(subset_164_fMLP[,"average_directness"], breaks = 25, main = "164 - fMLP - average_directness")
+hist(subset_164_PBS[,"average_directness"], breaks = 25, main = "164 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_164_CXCL1_niet0_adi = subset(subset_164_CXCL1, average_directness > 0)
+subset_164_CXCL8_niet0_adi = subset(subset_164_CXCL8, average_directness > 0)
+subset_164_fMLP_niet0_adi = subset(subset_164_fMLP, average_directness > 0)
+subset_164_PBS_niet0_adi = subset(subset_164_PBS, average_directness > 0)
+
+hist(subset_164_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "164 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_164_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "164 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_164_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "164 - fMLP - 0 eruit -  average_directness")
+hist(subset_164_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "164 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_164_CXCL1[,"mean_speed"], breaks = 25, main = "164 - CXCL1 - mean_speed")
+hist(subset_164_CXCL8[,"mean_speed"], breaks = 25, main = "164 - CXCL8 - mean_speed")
+hist(subset_164_fMLP[,"mean_speed"], breaks = 25, main = "164 - fMLP - mean_speed")
+hist(subset_164_PBS[,"mean_speed"], breaks = 25, main = "164 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_164_CXCL1_niet0_ms = subset(subset_164_CXCL1, mean_speed > 0)
+subset_164_CXCL8_niet0_ms = subset(subset_164_CXCL8, mean_speed > 0)
+subset_164_fMLP_niet0_ms = subset(subset_164_fMLP, mean_speed > 0)
+subset_164_PBS_niet0_ms = subset(subset_164_PBS, mean_speed > 0)
+
+hist(subset_164_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "164 - CXCL1 - niet0 - mean_speed")
+hist(subset_164_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "164 - CXCL8 - niet0 - mean_speed")
+hist(subset_164_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "164 - fMLP - niet0 - mean_speed")
+hist(subset_164_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "164 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_164_CXCL1[,"stdev_velocity"], breaks = 25, main = "164 - CXCL1 - stdev_velocity")
+hist(subset_164_CXCL8[,"stdev_velocity"], breaks = 25, main = "164 - CXCL8 - stdev_velocity")
+hist(subset_164_fMLP[,"stdev_velocity"], breaks = 25, main = "164 - fMLP - stdev_velocity")
+hist(subset_164_PBS[,"stdev_velocity"], breaks = 25, main = "164 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_164_CXCL1_niet0_sv = subset(subset_164_CXCL1, stdev_velocity > 0)
+subset_164_CXCL8_niet0_sv = subset(subset_164_CXCL8, stdev_velocity > 0)
+subset_164_fMLP_niet0_sv = subset(subset_164_fMLP, stdev_velocity > 0)
+subset_164_PBS_niet0_sv = subset(subset_164_PBS, stdev_velocity > 0)
+
+hist(subset_164_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "164 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_164_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "164 - CXCL8 - niet0 stdev_velocity")
+hist(subset_164_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "164 - fMLP - niet0 - stdev_velocity")
+hist(subset_164_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "164 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_164_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "164 - CXCL1 - forward_migration_index_x")
+hist(subset_164_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "164 - CXCL8 - forward_migration_index_x")
+hist(subset_164_fMLP[,"forward_migration_index_x"], breaks = 25, main = "164 - fMLP - forward_migration_index_x")
+hist(subset_164_PBS[,"forward_migration_index_x"], breaks = 25, main = "164 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_164_CXCL1_niet0_fx = subset(subset_164_CXCL1, forward_migration_index_x != 0)
+subset_164_CXCL8_niet0_fx = subset(subset_164_CXCL8, forward_migration_index_x != 0)
+subset_164_fMLP_niet0_fx = subset(subset_164_fMLP, forward_migration_index_x != 0)
+subset_164_PBS_niet0_fx = subset(subset_164_PBS, forward_migration_index_x != 0)
+
+hist(subset_164_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "164 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_164_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "164 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_164_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "164 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_164_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "164 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_164_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "164 - CXCL1 - forward_migration_index_y")
+hist(subset_164_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "164 - CXCL8 - forward_migration_index_y")
+hist(subset_164_fMLP[,"forward_migration_index_y"], breaks = 25, main = "164 - fMLP - forward_migration_index_y")
+hist(subset_164_PBS[,"forward_migration_index_y"], breaks = 25, main = "164 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_164_CXCL1_niet0_fy = subset(subset_164_CXCL1, forward_migration_index_y != 0)
+subset_164_CXCL8_niet0_fy = subset(subset_164_CXCL8, forward_migration_index_y != 0)
+subset_164_fMLP_niet0_fy = subset(subset_164_fMLP, forward_migration_index_y != 0)
+subset_164_PBS_niet0_fy = subset(subset_164_PBS, forward_migration_index_y != 0)
+
+hist(subset_164_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "164 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_164_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "164 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_164_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "164 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_164_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "164 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+#Patient 714
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_714_CXCL1[,"accumulated_distance"], breaks = 25, main = "714 - CXCL1 - accumulated distance")
+hist(subset_714_CXCL8[,"accumulated_distance"], breaks = 25, main = "714 - CXCL8 - accumulated distance")
+hist(subset_714_fMLP[,"accumulated_distance"], breaks = 25, main = "714 - fMLP - acummulated distance")
+hist(subset_714_PBS[,"accumulated_distance"], breaks = 25, main = "714 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_714_CXCL1_niet0_ad = subset(subset_714_CXCL1, accumulated_distance > 0)
+subset_714_CXCL8_niet0_ad = subset(subset_714_CXCL8, accumulated_distance > 0)
+subset_714_fMLP_niet0_ad = subset(subset_714_fMLP, accumulated_distance > 0)
+subset_714_PBS_niet0_ad = subset(subset_714_PBS, accumulated_distance > 0)
+
+hist(subset_714_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "714 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_714_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "714 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_714_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "714 - fMLP - 0 eruit - accumulated distance")
+hist(subset_714_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "714 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_714_CXCL1[,"euclidian_distance"], breaks = 25, main = "714 - CXCL1 - euclidian distance")
+hist(subset_714_CXCL8[,"euclidian_distance"], breaks = 25, main = "714 - CXCL8 - euclidian distance")
+hist(subset_714_fMLP[,"euclidian_distance"], breaks = 25, main = "714 - fMLP - euclidian distance")
+hist(subset_714_PBS[,"euclidian_distance"], breaks = 25, main = "714 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_714_CXCL1_niet0_ed = subset(subset_714_CXCL1, euclidian_distance > 0)
+subset_714_CXCL8_niet0_ed = subset(subset_714_CXCL8, euclidian_distance > 0)
+subset_714_fMLP_niet0_ed = subset(subset_714_fMLP, euclidian_distance > 0)
+subset_714_PBS_niet0_ed = subset(subset_714_PBS, euclidian_distance > 0)
+
+hist(subset_714_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "714 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_714_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "714 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_714_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "714 - fMLP - 0 eruit - euclidian distance")
+hist(subset_714_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "714 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_714_CXCL1[,"average_directness"], breaks = 25, main = "714 - CXCL1 - average_directness")
+hist(subset_714_CXCL8[,"average_directness"], breaks = 25, main = "714 - CXCL8 - average_directness")
+hist(subset_714_fMLP[,"average_directness"], breaks = 25, main = "714 - fMLP - average_directness")
+hist(subset_714_PBS[,"average_directness"], breaks = 25, main = "714 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_714_CXCL1_niet0_adi = subset(subset_714_CXCL1, average_directness > 0)
+subset_714_CXCL8_niet0_adi = subset(subset_714_CXCL8, average_directness > 0)
+subset_714_fMLP_niet0_adi = subset(subset_714_fMLP, average_directness > 0)
+subset_714_PBS_niet0_adi = subset(subset_714_PBS, average_directness > 0)
+
+hist(subset_714_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "714 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_714_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "714 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_714_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "714 - fMLP - 0 eruit -  average_directness")
+hist(subset_714_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "714 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_714_CXCL1[,"mean_speed"], breaks = 25, main = "714 - CXCL1 - mean_speed")
+hist(subset_714_CXCL8[,"mean_speed"], breaks = 25, main = "714 - CXCL8 - mean_speed")
+hist(subset_714_fMLP[,"mean_speed"], breaks = 25, main = "714 - fMLP - mean_speed")
+hist(subset_714_PBS[,"mean_speed"], breaks = 25, main = "714 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_714_CXCL1_niet0_ms = subset(subset_714_CXCL1, mean_speed > 0)
+subset_714_CXCL8_niet0_ms = subset(subset_714_CXCL8, mean_speed > 0)
+subset_714_fMLP_niet0_ms = subset(subset_714_fMLP, mean_speed > 0)
+subset_714_PBS_niet0_ms = subset(subset_714_PBS, mean_speed > 0)
+
+hist(subset_714_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "714 - CXCL1 - niet0 - mean_speed")
+hist(subset_714_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "714 - CXCL8 - niet0 - mean_speed")
+hist(subset_714_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "714 - fMLP - niet0 - mean_speed")
+hist(subset_714_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "714 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_714_CXCL1[,"stdev_velocity"], breaks = 25, main = "714 - CXCL1 - stdev_velocity")
+hist(subset_714_CXCL8[,"stdev_velocity"], breaks = 25, main = "714 - CXCL8 - stdev_velocity")
+hist(subset_714_fMLP[,"stdev_velocity"], breaks = 25, main = "714 - fMLP - stdev_velocity")
+hist(subset_714_PBS[,"stdev_velocity"], breaks = 25, main = "714 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_714_CXCL1_niet0_sv = subset(subset_714_CXCL1, stdev_velocity > 0)
+subset_714_CXCL8_niet0_sv = subset(subset_714_CXCL8, stdev_velocity > 0)
+subset_714_fMLP_niet0_sv = subset(subset_714_fMLP, stdev_velocity > 0)
+subset_714_PBS_niet0_sv = subset(subset_714_PBS, stdev_velocity > 0)
+
+hist(subset_714_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "714 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_714_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "714 - CXCL8 - niet0 stdev_velocity")
+hist(subset_714_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "714 - fMLP - niet0 - stdev_velocity")
+hist(subset_714_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "714 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_714_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "714 - CXCL1 - forward_migration_index_x")
+hist(subset_714_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "714 - CXCL8 - forward_migration_index_x")
+hist(subset_714_fMLP[,"forward_migration_index_x"], breaks = 25, main = "714 - fMLP - forward_migration_index_x")
+hist(subset_714_PBS[,"forward_migration_index_x"], breaks = 25, main = "714 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_714_CXCL1_niet0_fx = subset(subset_714_CXCL1, forward_migration_index_x != 0)
+subset_714_CXCL8_niet0_fx = subset(subset_714_CXCL8, forward_migration_index_x != 0)
+subset_714_fMLP_niet0_fx = subset(subset_714_fMLP, forward_migration_index_x != 0)
+subset_714_PBS_niet0_fx = subset(subset_714_PBS, forward_migration_index_x != 0)
+
+hist(subset_714_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "714 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_714_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "714 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_714_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "714 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_714_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "714 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_714_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "714 - CXCL1 - forward_migration_index_y")
+hist(subset_714_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "714 - CXCL8 - forward_migration_index_y")
+hist(subset_714_fMLP[,"forward_migration_index_y"], breaks = 25, main = "714 - fMLP - forward_migration_index_y")
+hist(subset_714_PBS[,"forward_migration_index_y"], breaks = 25, main = "714 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_714_CXCL1_niet0_fy = subset(subset_714_CXCL1, forward_migration_index_y != 0)
+subset_714_CXCL8_niet0_fy = subset(subset_714_CXCL8, forward_migration_index_y != 0)
+subset_714_fMLP_niet0_fy = subset(subset_714_fMLP, forward_migration_index_y != 0)
+subset_714_PBS_niet0_fy = subset(subset_714_PBS, forward_migration_index_y != 0)
+
+hist(subset_714_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "714 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_714_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "714 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_714_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "714 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_714_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "714 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+
+#Patient 722
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_722_CXCL1[,"accumulated_distance"], breaks = 25, main = "722 - CXCL1 - accumulated distance")
+hist(subset_722_CXCL8[,"accumulated_distance"], breaks = 25, main = "722 - CXCL8 - accumulated distance")
+hist(subset_722_fMLP[,"accumulated_distance"], breaks = 25, main = "722 - fMLP - acummulated distance")
+hist(subset_722_PBS[,"accumulated_distance"], breaks = 25, main = "722 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_722_CXCL1_niet0_ad = subset(subset_722_CXCL1, accumulated_distance > 0)
+subset_722_CXCL8_niet0_ad = subset(subset_722_CXCL8, accumulated_distance > 0)
+subset_722_fMLP_niet0_ad = subset(subset_722_fMLP, accumulated_distance > 0)
+subset_722_PBS_niet0_ad = subset(subset_722_PBS, accumulated_distance > 0)
+
+hist(subset_722_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "722 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_722_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "722 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_722_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "722 - fMLP - 0 eruit - accumulated distance")
+hist(subset_722_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "722 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_722_CXCL1[,"euclidian_distance"], breaks = 25, main = "722 - CXCL1 - euclidian distance")
+hist(subset_722_CXCL8[,"euclidian_distance"], breaks = 25, main = "722 - CXCL8 - euclidian distance")
+hist(subset_722_fMLP[,"euclidian_distance"], breaks = 25, main = "722 - fMLP - euclidian distance")
+hist(subset_722_PBS[,"euclidian_distance"], breaks = 25, main = "722 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_722_CXCL1_niet0_ed = subset(subset_722_CXCL1, euclidian_distance > 0)
+subset_722_CXCL8_niet0_ed = subset(subset_722_CXCL8, euclidian_distance > 0)
+subset_722_fMLP_niet0_ed = subset(subset_722_fMLP, euclidian_distance > 0)
+subset_722_PBS_niet0_ed = subset(subset_722_PBS, euclidian_distance > 0)
+
+hist(subset_722_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "722 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_722_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "722 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_722_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "722 - fMLP - 0 eruit - euclidian distance")
+hist(subset_722_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "722 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_722_CXCL1[,"average_directness"], breaks = 25, main = "722 - CXCL1 - average_directness")
+hist(subset_722_CXCL8[,"average_directness"], breaks = 25, main = "722 - CXCL8 - average_directness")
+hist(subset_722_fMLP[,"average_directness"], breaks = 25, main = "722 - fMLP - average_directness")
+hist(subset_722_PBS[,"average_directness"], breaks = 25, main = "722 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_722_CXCL1_niet0_adi = subset(subset_722_CXCL1, average_directness > 0)
+subset_722_CXCL8_niet0_adi = subset(subset_722_CXCL8, average_directness > 0)
+subset_722_fMLP_niet0_adi = subset(subset_722_fMLP, average_directness > 0)
+subset_722_PBS_niet0_adi = subset(subset_722_PBS, average_directness > 0)
+
+hist(subset_722_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "722 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_722_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "722 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_722_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "722 - fMLP - 0 eruit -  average_directness")
+hist(subset_722_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "722 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_722_CXCL1[,"mean_speed"], breaks = 25, main = "722 - CXCL1 - mean_speed")
+hist(subset_722_CXCL8[,"mean_speed"], breaks = 25, main = "722 - CXCL8 - mean_speed")
+hist(subset_722_fMLP[,"mean_speed"], breaks = 25, main = "722 - fMLP - mean_speed")
+hist(subset_722_PBS[,"mean_speed"], breaks = 25, main = "722 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_722_CXCL1_niet0_ms = subset(subset_722_CXCL1, mean_speed > 0)
+subset_722_CXCL8_niet0_ms = subset(subset_722_CXCL8, mean_speed > 0)
+subset_722_fMLP_niet0_ms = subset(subset_722_fMLP, mean_speed > 0)
+subset_722_PBS_niet0_ms = subset(subset_722_PBS, mean_speed > 0)
+
+hist(subset_722_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "722 - CXCL1 - niet0 - mean_speed")
+hist(subset_722_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "722 - CXCL8 - niet0 - mean_speed")
+hist(subset_722_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "722 - fMLP - niet0 - mean_speed")
+hist(subset_722_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "722 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_722_CXCL1[,"stdev_velocity"], breaks = 25, main = "722 - CXCL1 - stdev_velocity")
+hist(subset_722_CXCL8[,"stdev_velocity"], breaks = 25, main = "722 - CXCL8 - stdev_velocity")
+hist(subset_722_fMLP[,"stdev_velocity"], breaks = 25, main = "722 - fMLP - stdev_velocity")
+hist(subset_722_PBS[,"stdev_velocity"], breaks = 25, main = "722 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_722_CXCL1_niet0_sv = subset(subset_722_CXCL1, stdev_velocity > 0)
+subset_722_CXCL8_niet0_sv = subset(subset_722_CXCL8, stdev_velocity > 0)
+subset_722_fMLP_niet0_sv = subset(subset_722_fMLP, stdev_velocity > 0)
+subset_722_PBS_niet0_sv = subset(subset_722_PBS, stdev_velocity > 0)
+
+hist(subset_722_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "722 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_722_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "722 - CXCL8 - niet0 stdev_velocity")
+hist(subset_722_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "722 - fMLP - niet0 - stdev_velocity")
+hist(subset_722_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "722 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_722_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "722 - CXCL1 - forward_migration_index_x")
+hist(subset_722_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "722 - CXCL8 - forward_migration_index_x")
+hist(subset_722_fMLP[,"forward_migration_index_x"], breaks = 25, main = "722 - fMLP - forward_migration_index_x")
+hist(subset_722_PBS[,"forward_migration_index_x"], breaks = 25, main = "722 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_722_CXCL1_niet0_fx = subset(subset_722_CXCL1, forward_migration_index_x != 0)
+subset_722_CXCL8_niet0_fx = subset(subset_722_CXCL8, forward_migration_index_x != 0)
+subset_722_fMLP_niet0_fx = subset(subset_722_fMLP, forward_migration_index_x != 0)
+subset_722_PBS_niet0_fx = subset(subset_722_PBS, forward_migration_index_x != 0)
+
+hist(subset_722_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "722 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_722_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "722 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_722_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "722 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_722_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "722 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_722_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "722 - CXCL1 - forward_migration_index_y")
+hist(subset_722_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "722 - CXCL8 - forward_migration_index_y")
+hist(subset_722_fMLP[,"forward_migration_index_y"], breaks = 25, main = "722 - fMLP - forward_migration_index_y")
+hist(subset_722_PBS[,"forward_migration_index_y"], breaks = 25, main = "722 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_722_CXCL1_niet0_fy = subset(subset_722_CXCL1, forward_migration_index_y != 0)
+subset_722_CXCL8_niet0_fy = subset(subset_722_CXCL8, forward_migration_index_y != 0)
+subset_722_fMLP_niet0_fy = subset(subset_722_fMLP, forward_migration_index_y != 0)
+subset_722_PBS_niet0_fy = subset(subset_722_PBS, forward_migration_index_y != 0)
+
+hist(subset_722_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "722 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_722_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "722 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_722_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "722 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_722_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "722 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+
+
+
+#Patient 751
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_751_CXCL1[,"accumulated_distance"], breaks = 25, main = "751 - CXCL1 - accumulated distance")
+hist(subset_751_CXCL8[,"accumulated_distance"], breaks = 25, main = "751 - CXCL8 - accumulated distance")
+hist(subset_751_fMLP[,"accumulated_distance"], breaks = 25, main = "751 - fMLP - acummulated distance")
+hist(subset_751_PBS[,"accumulated_distance"], breaks = 25, main = "751 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_751_CXCL1_niet0_ad = subset(subset_751_CXCL1, accumulated_distance > 0)
+subset_751_CXCL8_niet0_ad = subset(subset_751_CXCL8, accumulated_distance > 0)
+subset_751_fMLP_niet0_ad = subset(subset_751_fMLP, accumulated_distance > 0)
+subset_751_PBS_niet0_ad = subset(subset_751_PBS, accumulated_distance > 0)
+
+hist(subset_751_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "751 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_751_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "751 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_751_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "751 - fMLP - 0 eruit - accumulated distance")
+hist(subset_751_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "751 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_751_CXCL1[,"euclidian_distance"], breaks = 25, main = "751 - CXCL1 - euclidian distance")
+hist(subset_751_CXCL8[,"euclidian_distance"], breaks = 25, main = "751 - CXCL8 - euclidian distance")
+hist(subset_751_fMLP[,"euclidian_distance"], breaks = 25, main = "751 - fMLP - euclidian distance")
+hist(subset_751_PBS[,"euclidian_distance"], breaks = 25, main = "751 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_751_CXCL1_niet0_ed = subset(subset_751_CXCL1, euclidian_distance > 0)
+subset_751_CXCL8_niet0_ed = subset(subset_751_CXCL8, euclidian_distance > 0)
+subset_751_fMLP_niet0_ed = subset(subset_751_fMLP, euclidian_distance > 0)
+subset_751_PBS_niet0_ed = subset(subset_751_PBS, euclidian_distance > 0)
+
+hist(subset_751_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "751 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_751_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "751 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_751_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "751 - fMLP - 0 eruit - euclidian distance")
+hist(subset_751_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "751 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_751_CXCL1[,"average_directness"], breaks = 25, main = "751 - CXCL1 - average_directness")
+hist(subset_751_CXCL8[,"average_directness"], breaks = 25, main = "751 - CXCL8 - average_directness")
+hist(subset_751_fMLP[,"average_directness"], breaks = 25, main = "751 - fMLP - average_directness")
+hist(subset_751_PBS[,"average_directness"], breaks = 25, main = "751 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_751_CXCL1_niet0_adi = subset(subset_751_CXCL1, average_directness > 0)
+subset_751_CXCL8_niet0_adi = subset(subset_751_CXCL8, average_directness > 0)
+subset_751_fMLP_niet0_adi = subset(subset_751_fMLP, average_directness > 0)
+subset_751_PBS_niet0_adi = subset(subset_751_PBS, average_directness > 0)
+
+hist(subset_751_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "751 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_751_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "751 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_751_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "751 - fMLP - 0 eruit -  average_directness")
+hist(subset_751_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "751 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_751_CXCL1[,"mean_speed"], breaks = 25, main = "751 - CXCL1 - mean_speed")
+hist(subset_751_CXCL8[,"mean_speed"], breaks = 25, main = "751 - CXCL8 - mean_speed")
+hist(subset_751_fMLP[,"mean_speed"], breaks = 25, main = "751 - fMLP - mean_speed")
+hist(subset_751_PBS[,"mean_speed"], breaks = 25, main = "751 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_751_CXCL1_niet0_ms = subset(subset_751_CXCL1, mean_speed > 0)
+subset_751_CXCL8_niet0_ms = subset(subset_751_CXCL8, mean_speed > 0)
+subset_751_fMLP_niet0_ms = subset(subset_751_fMLP, mean_speed > 0)
+subset_751_PBS_niet0_ms = subset(subset_751_PBS, mean_speed > 0)
+
+hist(subset_751_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "751 - CXCL1 - niet0 - mean_speed")
+hist(subset_751_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "751 - CXCL8 - niet0 - mean_speed")
+hist(subset_751_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "751 - fMLP - niet0 - mean_speed")
+hist(subset_751_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "751 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_751_CXCL1[,"stdev_velocity"], breaks = 25, main = "751 - CXCL1 - stdev_velocity")
+hist(subset_751_CXCL8[,"stdev_velocity"], breaks = 25, main = "751 - CXCL8 - stdev_velocity")
+hist(subset_751_fMLP[,"stdev_velocity"], breaks = 25, main = "751 - fMLP - stdev_velocity")
+hist(subset_751_PBS[,"stdev_velocity"], breaks = 25, main = "751 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_751_CXCL1_niet0_sv = subset(subset_751_CXCL1, stdev_velocity > 0)
+subset_751_CXCL8_niet0_sv = subset(subset_751_CXCL8, stdev_velocity > 0)
+subset_751_fMLP_niet0_sv = subset(subset_751_fMLP, stdev_velocity > 0)
+subset_751_PBS_niet0_sv = subset(subset_751_PBS, stdev_velocity > 0)
+
+hist(subset_751_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "751 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_751_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "751 - CXCL8 - niet0 stdev_velocity")
+hist(subset_751_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "751 - fMLP - niet0 - stdev_velocity")
+hist(subset_751_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "751 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_751_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "751 - CXCL1 - forward_migration_index_x")
+hist(subset_751_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "751 - CXCL8 - forward_migration_index_x")
+hist(subset_751_fMLP[,"forward_migration_index_x"], breaks = 25, main = "751 - fMLP - forward_migration_index_x")
+hist(subset_751_PBS[,"forward_migration_index_x"], breaks = 25, main = "751 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_751_CXCL1_niet0_fx = subset(subset_751_CXCL1, forward_migration_index_x != 0)
+subset_751_CXCL8_niet0_fx = subset(subset_751_CXCL8, forward_migration_index_x != 0)
+subset_751_fMLP_niet0_fx = subset(subset_751_fMLP, forward_migration_index_x != 0)
+subset_751_PBS_niet0_fx = subset(subset_751_PBS, forward_migration_index_x != 0)
+
+hist(subset_751_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "751 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_751_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "751 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_751_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "751 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_751_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "751 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_751_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "751 - CXCL1 - forward_migration_index_y")
+hist(subset_751_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "751 - CXCL8 - forward_migration_index_y")
+hist(subset_751_fMLP[,"forward_migration_index_y"], breaks = 25, main = "751 - fMLP - forward_migration_index_y")
+hist(subset_751_PBS[,"forward_migration_index_y"], breaks = 25, main = "751 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_751_CXCL1_niet0_fy = subset(subset_751_CXCL1, forward_migration_index_y != 0)
+subset_751_CXCL8_niet0_fy = subset(subset_751_CXCL8, forward_migration_index_y != 0)
+subset_751_fMLP_niet0_fy = subset(subset_751_fMLP, forward_migration_index_y != 0)
+subset_751_PBS_niet0_fy = subset(subset_751_PBS, forward_migration_index_y != 0)
+
+hist(subset_751_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "751 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_751_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "751 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_751_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "751 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_751_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "751 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+#Patient 805
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_805_CXCL1[,"accumulated_distance"], breaks = 25, main = "805 - CXCL1 - accumulated distance")
+hist(subset_805_CXCL8[,"accumulated_distance"], breaks = 25, main = "805 - CXCL8 - accumulated distance")
+hist(subset_805_fMLP[,"accumulated_distance"], breaks = 25, main = "805 - fMLP - acummulated distance")
+hist(subset_805_PBS[,"accumulated_distance"], breaks = 25, main = "805 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_805_CXCL1_niet0_ad = subset(subset_805_CXCL1, accumulated_distance > 0)
+subset_805_CXCL8_niet0_ad = subset(subset_805_CXCL8, accumulated_distance > 0)
+subset_805_fMLP_niet0_ad = subset(subset_805_fMLP, accumulated_distance > 0)
+subset_805_PBS_niet0_ad = subset(subset_805_PBS, accumulated_distance > 0)
+
+hist(subset_805_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "805 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_805_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "805 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_805_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "805 - fMLP - 0 eruit - accumulated distance")
+hist(subset_805_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "805 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_805_CXCL1[,"euclidian_distance"], breaks = 25, main = "805 - CXCL1 - euclidian distance")
+hist(subset_805_CXCL8[,"euclidian_distance"], breaks = 25, main = "805 - CXCL8 - euclidian distance")
+hist(subset_805_fMLP[,"euclidian_distance"], breaks = 25, main = "805 - fMLP - euclidian distance")
+hist(subset_805_PBS[,"euclidian_distance"], breaks = 25, main = "805 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_805_CXCL1_niet0_ed = subset(subset_805_CXCL1, euclidian_distance > 0)
+subset_805_CXCL8_niet0_ed = subset(subset_805_CXCL8, euclidian_distance > 0)
+subset_805_fMLP_niet0_ed = subset(subset_805_fMLP, euclidian_distance > 0)
+subset_805_PBS_niet0_ed = subset(subset_805_PBS, euclidian_distance > 0)
+
+hist(subset_805_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "805 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_805_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "805 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_805_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "805 - fMLP - 0 eruit - euclidian distance")
+hist(subset_805_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "805 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_805_CXCL1[,"average_directness"], breaks = 25, main = "805 - CXCL1 - average_directness")
+hist(subset_805_CXCL8[,"average_directness"], breaks = 25, main = "805 - CXCL8 - average_directness")
+hist(subset_805_fMLP[,"average_directness"], breaks = 25, main = "805 - fMLP - average_directness")
+hist(subset_805_PBS[,"average_directness"], breaks = 25, main = "805 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_805_CXCL1_niet0_adi = subset(subset_805_CXCL1, average_directness > 0)
+subset_805_CXCL8_niet0_adi = subset(subset_805_CXCL8, average_directness > 0)
+subset_805_fMLP_niet0_adi = subset(subset_805_fMLP, average_directness > 0)
+subset_805_PBS_niet0_adi = subset(subset_805_PBS, average_directness > 0)
+
+hist(subset_805_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "805 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_805_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "805 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_805_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "805 - fMLP - 0 eruit -  average_directness")
+hist(subset_805_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "805 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_805_CXCL1[,"mean_speed"], breaks = 25, main = "805 - CXCL1 - mean_speed")
+hist(subset_805_CXCL8[,"mean_speed"], breaks = 25, main = "805 - CXCL8 - mean_speed")
+hist(subset_805_fMLP[,"mean_speed"], breaks = 25, main = "805 - fMLP - mean_speed")
+hist(subset_805_PBS[,"mean_speed"], breaks = 25, main = "805 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_805_CXCL1_niet0_ms = subset(subset_805_CXCL1, mean_speed > 0)
+subset_805_CXCL8_niet0_ms = subset(subset_805_CXCL8, mean_speed > 0)
+subset_805_fMLP_niet0_ms = subset(subset_805_fMLP, mean_speed > 0)
+subset_805_PBS_niet0_ms = subset(subset_805_PBS, mean_speed > 0)
+
+hist(subset_805_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "805 - CXCL1 - niet0 - mean_speed")
+hist(subset_805_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "805 - CXCL8 - niet0 - mean_speed")
+hist(subset_805_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "805 - fMLP - niet0 - mean_speed")
+hist(subset_805_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "805 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_805_CXCL1[,"stdev_velocity"], breaks = 25, main = "805 - CXCL1 - stdev_velocity")
+hist(subset_805_CXCL8[,"stdev_velocity"], breaks = 25, main = "805 - CXCL8 - stdev_velocity")
+hist(subset_805_fMLP[,"stdev_velocity"], breaks = 25, main = "805 - fMLP - stdev_velocity")
+hist(subset_805_PBS[,"stdev_velocity"], breaks = 25, main = "805 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_805_CXCL1_niet0_sv = subset(subset_805_CXCL1, stdev_velocity > 0)
+subset_805_CXCL8_niet0_sv = subset(subset_805_CXCL8, stdev_velocity > 0)
+subset_805_fMLP_niet0_sv = subset(subset_805_fMLP, stdev_velocity > 0)
+subset_805_PBS_niet0_sv = subset(subset_805_PBS, stdev_velocity > 0)
+
+hist(subset_805_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "805 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_805_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "805 - CXCL8 - niet0 stdev_velocity")
+hist(subset_805_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "805 - fMLP - niet0 - stdev_velocity")
+hist(subset_805_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "805 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_805_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "805 - CXCL1 - forward_migration_index_x")
+hist(subset_805_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "805 - CXCL8 - forward_migration_index_x")
+hist(subset_805_fMLP[,"forward_migration_index_x"], breaks = 25, main = "805 - fMLP - forward_migration_index_x")
+hist(subset_805_PBS[,"forward_migration_index_x"], breaks = 25, main = "805 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_805_CXCL1_niet0_fx = subset(subset_805_CXCL1, forward_migration_index_x != 0)
+subset_805_CXCL8_niet0_fx = subset(subset_805_CXCL8, forward_migration_index_x != 0)
+subset_805_fMLP_niet0_fx = subset(subset_805_fMLP, forward_migration_index_x != 0)
+subset_805_PBS_niet0_fx = subset(subset_805_PBS, forward_migration_index_x != 0)
+
+hist(subset_805_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "805 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_805_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "805 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_805_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "805 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_805_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "805 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_805_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "805 - CXCL1 - forward_migration_index_y")
+hist(subset_805_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "805 - CXCL8 - forward_migration_index_y")
+hist(subset_805_fMLP[,"forward_migration_index_y"], breaks = 25, main = "805 - fMLP - forward_migration_index_y")
+hist(subset_805_PBS[,"forward_migration_index_y"], breaks = 25, main = "805 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_805_CXCL1_niet0_fy = subset(subset_805_CXCL1, forward_migration_index_y != 0)
+subset_805_CXCL8_niet0_fy = subset(subset_805_CXCL8, forward_migration_index_y != 0)
+subset_805_fMLP_niet0_fy = subset(subset_805_fMLP, forward_migration_index_y != 0)
+subset_805_PBS_niet0_fy = subset(subset_805_PBS, forward_migration_index_y != 0)
+
+hist(subset_805_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "805 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_805_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "805 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_805_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "805 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_805_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "805 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+
+#Patient 858
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_858_CXCL1[,"accumulated_distance"], breaks = 25, main = "858 - CXCL1 - accumulated distance")
+hist(subset_858_CXCL8[,"accumulated_distance"], breaks = 25, main = "858 - CXCL8 - accumulated distance")
+hist(subset_858_fMLP[,"accumulated_distance"], breaks = 25, main = "858 - fMLP - acummulated distance")
+hist(subset_858_PBS[,"accumulated_distance"], breaks = 25, main = "858 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_858_CXCL1_niet0_ad = subset(subset_858_CXCL1, accumulated_distance > 0)
+subset_858_CXCL8_niet0_ad = subset(subset_858_CXCL8, accumulated_distance > 0)
+subset_858_fMLP_niet0_ad = subset(subset_858_fMLP, accumulated_distance > 0)
+subset_858_PBS_niet0_ad = subset(subset_858_PBS, accumulated_distance > 0)
+
+hist(subset_858_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "858 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_858_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "858 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_858_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "858 - fMLP - 0 eruit - accumulated distance")
+hist(subset_858_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "858 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_858_CXCL1[,"euclidian_distance"], breaks = 25, main = "858 - CXCL1 - euclidian distance")
+hist(subset_858_CXCL8[,"euclidian_distance"], breaks = 25, main = "858 - CXCL8 - euclidian distance")
+hist(subset_858_fMLP[,"euclidian_distance"], breaks = 25, main = "858 - fMLP - euclidian distance")
+hist(subset_858_PBS[,"euclidian_distance"], breaks = 25, main = "858 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_858_CXCL1_niet0_ed = subset(subset_858_CXCL1, euclidian_distance > 0)
+subset_858_CXCL8_niet0_ed = subset(subset_858_CXCL8, euclidian_distance > 0)
+subset_858_fMLP_niet0_ed = subset(subset_858_fMLP, euclidian_distance > 0)
+subset_858_PBS_niet0_ed = subset(subset_858_PBS, euclidian_distance > 0)
+
+hist(subset_858_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "858 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_858_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "858 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_858_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "858 - fMLP - 0 eruit - euclidian distance")
+hist(subset_858_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "858 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_858_CXCL1[,"average_directness"], breaks = 25, main = "858 - CXCL1 - average_directness")
+hist(subset_858_CXCL8[,"average_directness"], breaks = 25, main = "858 - CXCL8 - average_directness")
+hist(subset_858_fMLP[,"average_directness"], breaks = 25, main = "858 - fMLP - average_directness")
+hist(subset_858_PBS[,"average_directness"], breaks = 25, main = "858 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_858_CXCL1_niet0_adi = subset(subset_858_CXCL1, average_directness > 0)
+subset_858_CXCL8_niet0_adi = subset(subset_858_CXCL8, average_directness > 0)
+subset_858_fMLP_niet0_adi = subset(subset_858_fMLP, average_directness > 0)
+subset_858_PBS_niet0_adi = subset(subset_858_PBS, average_directness > 0)
+
+hist(subset_858_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "858 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_858_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "858 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_858_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "858 - fMLP - 0 eruit -  average_directness")
+hist(subset_858_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "858 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_858_CXCL1[,"mean_speed"], breaks = 25, main = "858 - CXCL1 - mean_speed")
+hist(subset_858_CXCL8[,"mean_speed"], breaks = 25, main = "858 - CXCL8 - mean_speed")
+hist(subset_858_fMLP[,"mean_speed"], breaks = 25, main = "858 - fMLP - mean_speed")
+hist(subset_858_PBS[,"mean_speed"], breaks = 25, main = "858 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_858_CXCL1_niet0_ms = subset(subset_858_CXCL1, mean_speed > 0)
+subset_858_CXCL8_niet0_ms = subset(subset_858_CXCL8, mean_speed > 0)
+subset_858_fMLP_niet0_ms = subset(subset_858_fMLP, mean_speed > 0)
+subset_858_PBS_niet0_ms = subset(subset_858_PBS, mean_speed > 0)
+
+hist(subset_858_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "858 - CXCL1 - niet0 - mean_speed")
+hist(subset_858_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "858 - CXCL8 - niet0 - mean_speed")
+hist(subset_858_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "858 - fMLP - niet0 - mean_speed")
+hist(subset_858_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "858 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_858_CXCL1[,"stdev_velocity"], breaks = 25, main = "858 - CXCL1 - stdev_velocity")
+hist(subset_858_CXCL8[,"stdev_velocity"], breaks = 25, main = "858 - CXCL8 - stdev_velocity")
+hist(subset_858_fMLP[,"stdev_velocity"], breaks = 25, main = "858 - fMLP - stdev_velocity")
+hist(subset_858_PBS[,"stdev_velocity"], breaks = 25, main = "858 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_858_CXCL1_niet0_sv = subset(subset_858_CXCL1, stdev_velocity > 0)
+subset_858_CXCL8_niet0_sv = subset(subset_858_CXCL8, stdev_velocity > 0)
+subset_858_fMLP_niet0_sv = subset(subset_858_fMLP, stdev_velocity > 0)
+subset_858_PBS_niet0_sv = subset(subset_858_PBS, stdev_velocity > 0)
+
+hist(subset_858_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "858 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_858_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "858 - CXCL8 - niet0 stdev_velocity")
+hist(subset_858_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "858 - fMLP - niet0 - stdev_velocity")
+hist(subset_858_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "858 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_858_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "858 - CXCL1 - forward_migration_index_x")
+hist(subset_858_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "858 - CXCL8 - forward_migration_index_x")
+hist(subset_858_fMLP[,"forward_migration_index_x"], breaks = 25, main = "858 - fMLP - forward_migration_index_x")
+hist(subset_858_PBS[,"forward_migration_index_x"], breaks = 25, main = "858 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_858_CXCL1_niet0_fx = subset(subset_858_CXCL1, forward_migration_index_x != 0)
+subset_858_CXCL8_niet0_fx = subset(subset_858_CXCL8, forward_migration_index_x != 0)
+subset_858_fMLP_niet0_fx = subset(subset_858_fMLP, forward_migration_index_x != 0)
+subset_858_PBS_niet0_fx = subset(subset_858_PBS, forward_migration_index_x != 0)
+
+hist(subset_858_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "858 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_858_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "858 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_858_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "858 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_858_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "858 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_858_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "858 - CXCL1 - forward_migration_index_y")
+hist(subset_858_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "858 - CXCL8 - forward_migration_index_y")
+hist(subset_858_fMLP[,"forward_migration_index_y"], breaks = 25, main = "858 - fMLP - forward_migration_index_y")
+hist(subset_858_PBS[,"forward_migration_index_y"], breaks = 25, main = "858 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_858_CXCL1_niet0_fy = subset(subset_858_CXCL1, forward_migration_index_y != 0)
+subset_858_CXCL8_niet0_fy = subset(subset_858_CXCL8, forward_migration_index_y != 0)
+subset_858_fMLP_niet0_fy = subset(subset_858_fMLP, forward_migration_index_y != 0)
+subset_858_PBS_niet0_fy = subset(subset_858_PBS, forward_migration_index_y != 0)
+
+hist(subset_858_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "858 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_858_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "858 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_858_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "858 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_858_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "858 - PBS - niet0 -  forward_migration_index_y")
+
+
+
+
+
+#Patient 859
+#accumulated_distance
+par(mfrow = c(2,2))
+hist(subset_859_CXCL1[,"accumulated_distance"], breaks = 25, main = "859 - CXCL1 - accumulated distance")
+hist(subset_859_CXCL8[,"accumulated_distance"], breaks = 25, main = "859 - CXCL8 - accumulated distance")
+hist(subset_859_fMLP[,"accumulated_distance"], breaks = 25, main = "859 - fMLP - acummulated distance")
+hist(subset_859_PBS[,"accumulated_distance"], breaks = 25, main = "859 - PBS - accumulated distance")
+
+   #met 0 eruit gesmeten:
+subset_859_CXCL1_niet0_ad = subset(subset_859_CXCL1, accumulated_distance > 0)
+subset_859_CXCL8_niet0_ad = subset(subset_859_CXCL8, accumulated_distance > 0)
+subset_859_fMLP_niet0_ad = subset(subset_859_fMLP, accumulated_distance > 0)
+subset_859_PBS_niet0_ad = subset(subset_859_PBS, accumulated_distance > 0)
+
+hist(subset_859_CXCL1_niet0_ad[,"accumulated_distance"], breaks = 25, main = "859 - CXCL1 - 0 eruit - accumulated distance")
+hist(subset_859_CXCL8_niet0_ad[,"accumulated_distance"], breaks = 25, main = "859 - CXCL8 - 0 eruit - accumulated distance")
+hist(subset_859_fMLP_niet0_ad[,"accumulated_distance"], breaks = 25, main = "859 - fMLP - 0 eruit - accumulated distance")
+hist(subset_859_PBS_niet0_ad[,"accumulated_distance"], breaks = 25, main = "859 - PBS - 0 eruit - accumulated distance")
+
+#euclidian_distance
+hist(subset_859_CXCL1[,"euclidian_distance"], breaks = 25, main = "859 - CXCL1 - euclidian distance")
+hist(subset_859_CXCL8[,"euclidian_distance"], breaks = 25, main = "859 - CXCL8 - euclidian distance")
+hist(subset_859_fMLP[,"euclidian_distance"], breaks = 25, main = "859 - fMLP - euclidian distance")
+hist(subset_859_PBS[,"euclidian_distance"], breaks = 25, main = "859 - PBS - euclidian distance")
+
+  #met 0 eruit gesmeten
+subset_859_CXCL1_niet0_ed = subset(subset_859_CXCL1, euclidian_distance > 0)
+subset_859_CXCL8_niet0_ed = subset(subset_859_CXCL8, euclidian_distance > 0)
+subset_859_fMLP_niet0_ed = subset(subset_859_fMLP, euclidian_distance > 0)
+subset_859_PBS_niet0_ed = subset(subset_859_PBS, euclidian_distance > 0)
+
+hist(subset_859_CXCL1_niet0_ed[,"euclidian_distance"], breaks = 25, main = "859 - CXCL1 - 0 eruit - euclidian distance")
+hist(subset_859_CXCL8_niet0_ed[,"euclidian_distance"], breaks = 25, main = "859 - CXCL8 - 0 eruit - euclidian distance")
+hist(subset_859_fMLP_niet0_ed[,"euclidian_distance"], breaks = 25, main = "859 - fMLP - 0 eruit - euclidian distance")
+hist(subset_859_PBS_niet0_ed[,"euclidian_distance"], breaks = 25, main = "859 - PBS - 0 eruit - euclidian distance")
+
+#average directness
+hist(subset_859_CXCL1[,"average_directness"], breaks = 25, main = "859 - CXCL1 - average_directness")
+hist(subset_859_CXCL8[,"average_directness"], breaks = 25, main = "859 - CXCL8 - average_directness")
+hist(subset_859_fMLP[,"average_directness"], breaks = 25, main = "859 - fMLP - average_directness")
+hist(subset_859_PBS[,"average_directness"], breaks = 25, main = "859 - PBS - average_directness")
+
+  #met 0 eruit gesmeten
+subset_859_CXCL1_niet0_adi = subset(subset_859_CXCL1, average_directness > 0)
+subset_859_CXCL8_niet0_adi = subset(subset_859_CXCL8, average_directness > 0)
+subset_859_fMLP_niet0_adi = subset(subset_859_fMLP, average_directness > 0)
+subset_859_PBS_niet0_adi = subset(subset_859_PBS, average_directness > 0)
+
+hist(subset_859_CXCL1_niet0_adi[,"average_directness"], breaks = 25, main = "859 - CXCL1 - 0 eruit -  average_directness")
+hist(subset_859_CXCL8_niet0_adi[,"average_directness"], breaks = 25, main = "859 - CXCL8 - 0 eruit -  average_directness")
+hist(subset_859_fMLP_niet0_adi[,"average_directness"], breaks = 25, main = "859 - fMLP - 0 eruit -  average_directness")
+hist(subset_859_PBS_niet0_adi[,"average_directness"], breaks = 25, main = "859 - PBS - 0 eruit -  average_directness")
+
+#mean_speed
+hist(subset_859_CXCL1[,"mean_speed"], breaks = 25, main = "859 - CXCL1 - mean_speed")
+hist(subset_859_CXCL8[,"mean_speed"], breaks = 25, main = "859 - CXCL8 - mean_speed")
+hist(subset_859_fMLP[,"mean_speed"], breaks = 25, main = "859 - fMLP - mean_speed")
+hist(subset_859_PBS[,"mean_speed"], breaks = 25, main = "859 - PBS - mean_speed")
+
+  #met 0 eruit gesmeten
+subset_859_CXCL1_niet0_ms = subset(subset_859_CXCL1, mean_speed > 0)
+subset_859_CXCL8_niet0_ms = subset(subset_859_CXCL8, mean_speed > 0)
+subset_859_fMLP_niet0_ms = subset(subset_859_fMLP, mean_speed > 0)
+subset_859_PBS_niet0_ms = subset(subset_859_PBS, mean_speed > 0)
+
+hist(subset_859_CXCL1_niet0_ms[,"mean_speed"], breaks = 25, main = "859 - CXCL1 - niet0 - mean_speed")
+hist(subset_859_CXCL8_niet0_ms[,"mean_speed"], breaks = 25, main = "859 - CXCL8 - niet0 - mean_speed")
+hist(subset_859_fMLP_niet0_ms[,"mean_speed"], breaks = 25, main = "859 - fMLP - niet0 - mean_speed")
+hist(subset_859_PBS_niet0_ms[,"mean_speed"], breaks = 25, main = "859 - PBS - niet0 - mean_speed")
+
+#stdev_velocity
+
+hist(subset_859_CXCL1[,"stdev_velocity"], breaks = 25, main = "859 - CXCL1 - stdev_velocity")
+hist(subset_859_CXCL8[,"stdev_velocity"], breaks = 25, main = "859 - CXCL8 - stdev_velocity")
+hist(subset_859_fMLP[,"stdev_velocity"], breaks = 25, main = "859 - fMLP - stdev_velocity")
+hist(subset_859_PBS[,"stdev_velocity"], breaks = 25, main = "859 - PBS - stdev_velocity")
+
+  #met 0 eruit gesmeten
+subset_859_CXCL1_niet0_sv = subset(subset_859_CXCL1, stdev_velocity > 0)
+subset_859_CXCL8_niet0_sv = subset(subset_859_CXCL8, stdev_velocity > 0)
+subset_859_fMLP_niet0_sv = subset(subset_859_fMLP, stdev_velocity > 0)
+subset_859_PBS_niet0_sv = subset(subset_859_PBS, stdev_velocity > 0)
+
+hist(subset_859_CXCL1_niet0_sv[,"stdev_velocity"], breaks = 25, main = "859 - CXCL1 - niet0 - stdev_velocity")
+hist(subset_859_CXCL8_niet0_sv[,"stdev_velocity"], breaks = 25, main = "859 - CXCL8 - niet0 stdev_velocity")
+hist(subset_859_fMLP_niet0_sv[,"stdev_velocity"], breaks = 25, main = "859 - fMLP - niet0 - stdev_velocity")
+hist(subset_859_PBS_niet0_sv[,"stdev_velocity"], breaks = 25, main = "859 - PBS - niet0 - stdev_velocity")
+
+#forward migration index x
+hist(subset_859_CXCL1[,"forward_migration_index_x"], breaks = 25, main = "859 - CXCL1 - forward_migration_index_x")
+hist(subset_859_CXCL8[,"forward_migration_index_x"], breaks = 25, main = "859 - CXCL8 - forward_migration_index_x")
+hist(subset_859_fMLP[,"forward_migration_index_x"], breaks = 25, main = "859 - fMLP - forward_migration_index_x")
+hist(subset_859_PBS[,"forward_migration_index_x"], breaks = 25, main = "859 - PBS - forward_migration_index_x")
+
+  #met 0 eruit gesmeten
+subset_859_CXCL1_niet0_fx = subset(subset_859_CXCL1, forward_migration_index_x != 0)
+subset_859_CXCL8_niet0_fx = subset(subset_859_CXCL8, forward_migration_index_x != 0)
+subset_859_fMLP_niet0_fx = subset(subset_859_fMLP, forward_migration_index_x != 0)
+subset_859_PBS_niet0_fx = subset(subset_859_PBS, forward_migration_index_x != 0)
+
+hist(subset_859_CXCL1_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "859 - CXCL1 - niet0 - forward_migration_index_x")
+hist(subset_859_CXCL8_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "859 - CXCL8 - niet0 - forward_migration_index_x")
+hist(subset_859_fMLP_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "859 - fMLP - niet0 - forward_migration_index_x")
+hist(subset_859_PBS_niet0_fx[,"forward_migration_index_x"], breaks = 25, main = "859 - PBS - niet0 -  forward_migration_index_x")
+
+#forward migration index y
+hist(subset_859_CXCL1[,"forward_migration_index_y"], breaks = 25, main = "859 - CXCL1 - forward_migration_index_y")
+hist(subset_859_CXCL8[,"forward_migration_index_y"], breaks = 25, main = "859 - CXCL8 - forward_migration_index_y")
+hist(subset_859_fMLP[,"forward_migration_index_y"], breaks = 25, main = "859 - fMLP - forward_migration_index_y")
+hist(subset_859_PBS[,"forward_migration_index_y"], breaks = 25, main = "859 - PBS - forward_migration_index_y")
+
+  #met 0 eruit gesmeten
+subset_859_CXCL1_niet0_fy = subset(subset_859_CXCL1, forward_migration_index_y != 0)
+subset_859_CXCL8_niet0_fy = subset(subset_859_CXCL8, forward_migration_index_y != 0)
+subset_859_fMLP_niet0_fy = subset(subset_859_fMLP, forward_migration_index_y != 0)
+subset_859_PBS_niet0_fy = subset(subset_859_PBS, forward_migration_index_y != 0)
+
+hist(subset_859_CXCL1_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "859 - CXCL1 - niet0 - forward_migration_index_y")
+hist(subset_859_CXCL8_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "859 - CXCL8 - niet0 - forward_migration_index_y")
+hist(subset_859_fMLP_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "859 - fMLP - niet0 - forward_migration_index_y")
+hist(subset_859_PBS_niet0_fy[,"forward_migration_index_y"], breaks = 25, main = "859 - PBS - niet0 -  forward_migration_index_y")

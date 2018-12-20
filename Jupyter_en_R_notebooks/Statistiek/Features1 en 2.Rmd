@@ -1,0 +1,238 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+plot(cars)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features1 = read.csv(file = "MDS data + features1", header = TRUE, fill = TRUE)
+features1_NAN = read.csv(file = "MDS data +features1 NAN", header = TRUE, fill = TRUE)
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#opsplitsen per status
+condition = (features2[,"status"] == "control")
+subset_control = features2[condition,]
+
+condition2 = (features2[,"status"] == "mild")
+subset_mild = features2[condition2,]
+
+condition3 = features2[,"status"] == "severe"
+subset_severe = features2[condition3,]
+
+
+patientnumber = features2[,"patientnumber"]
+condition = (features2[,"patientnumber"] == 122 & features2[,"treatment"] == "CXCL1")
+subset_features2_CXCL1_122 = features2[condition,]
+
+condition2 = (features2[,"patientnumber"] == 122 & features2[,"treatment"] == "PBS")
+subset_features2_PBS_122 = features2[condition2,]
+
+condition3 = (features2[,"patientnumber"] == 122 & features2[,"treatment"] == "fMLP")
+subset_features2_fMLP_122 = features2[condition3,]
+
+condition4 = (features2[,"patientnumber"] == 122 & features2[,"treatment"] == "CXCL8")
+subset_features2_CXCL8_122 = features2[condition4,]
+
+#test for normality
+qqnorm(features2[,"accumulated_distance"], main = "accumulated_distance")
+qqline(features2[,"accumulated_distance"])
+
+qqnorm(features2[,"euclidian_distance"], main = "euclidian_distance")
+qqline(features2[,"euclidian_distance"])
+
+
+qqnorm(features2[,"average_directness"], main = "average_directness")
+qqline(features2[,"average_directness"])
+
+qqnorm(features2[,"mean_speed"], main = "mean_speed")
+qqline(features2[,"mean_speed"])
+
+qqnorm(features2[,"stdev_velocity"], main = "stdev_velocity")
+qqline(features2[,"stdev_velocity"])
+
+qqnorm(features2[,"forward_migration_index_x"], main = "forward_migration_index_x")
+qqline(features2[,"forward_migration_index_x"])
+
+qqnorm(features2[,"forward_migration_index_y"], main = "forward_migration_index_y")
+qqline(features2[,"forward_migration_index_y"])
+
+shapiro.test(features2[,"forward_migration_index_x"][0:5000])  #kan maar 5000 samples aan
+#install.packages('nortest')
+library(nortest)
+#anderson darling normality test:
+ad.test(features2[,"forward_migration_index_x"])
+  #zeggen alletwee dat deze feature niet normaal is verdeeld
+  
+shapiro.test(features2[,"stdev_velocity"][0:5000])
+ad.test(features2[,"stdev_velocity"])
+  #zeggen alletwee dat deze feature niet normaal verdeeld is
+
+shapiro.test(features2[,"forward_migration_index_y"][0:5000])
+ad.test(features2[,"forward_migration_index_y"])
+  #zeggen alletwee dat deze feature niet normaal verdeeld is
+
+#wat als je de nul eruit haalt?
+features2_fmiy_niet0 = subset(features2, forward_migration_index_y != 0)
+shapiro.test(features2_fmiy_niet0[,"forward_migration_index_y"][0:5000])
+ad.test(features2_fmiy_niet0[,"forward_migration_index_y"])
+  ##nog altijd hetzelfde
+
+features2_stdev_niet0 = subset(features2, stdev_velocity > 0)
+shapiro.test(features2_stdev_niet0[,"stdev_velocity"][0:5000])
+ad.test(features2_stdev_niet0[,"stdev_velocity"])
+  ##ook nog altijd hetzelfde
+
+features2_fmix_niet0 = subset(features2, forward_migration_index_x > 0)
+shapiro.test(features2_fmix_niet0[,"stdev_velocity"][0:5000])
+ad.test(features2_fmix_niet0[,"stdev_velocity"])
+  ##ook nog altijd hetzelfde
+
+#-> de nullen zullen de distributie niet zo hard veranderen dan
+
+
+qqnorm(subset_control[,"euclidian_distance"], main = "euclidian_distance_control")
+qqline(subset_control[,"euclidian_distance"])
+
+qqnorm(subset_control[,"accumulated_distance"], main = "accumulated_distance_control")
+qqline(subset_control[,"accumulated_distance"])
+
+qqnorm(subset_control[,"mean_speed"], main = "mean_speed_control")
+qqline(subset_control[,"mean_speed"])
+
+qqnorm(subset_mild[,"euclidian_distance"], main = "euclidian_distance_mild")
+qqline(subset_mild[,"euclidian_distance"])
+
+qqnorm(subset_mild[,"accumulated_distance"], main = "accumulated_distance_mild")
+qqline(subset_mild[,"accumulated_distance"])
+
+qqnorm(subset_mild[,"mean_speed"], main = "mean_speed_mild")
+qqline(subset_mild[,"mean_speed"])
+
+#histograms
+hist(features2[,"accumulated_distance"])
+hist(features2[,"euclidian_distance"])
+hist(features2[,"mean_speed"])
+hist(features2[,"average_directness"])
+hist(features2[,"stdev_velocity"])
+hist(features2[,"forward_migration_index_x"])
+hist(features2[,"forward_migration_index_y"])
+
+
+library(UsingR)
+library(Hmisc)
+simple.hist.and.boxplot(features2[,"accumulated_distance"], main = "accumulated_distance")
+
+#boxplots
+#vergelijking van de features tussen de verschillende ziektestatussen
+boxplot(subset_control[,'accumulated_distance'], subset_mild[,'accumulated_distance'], subset_severe[,'accumulated_distance'], main ="Accumulated distance: control vs mild vs severe")
+boxplot(subset_control[,'euclidian_distance'], subset_mild[,'euclidian_distance'], subset_severe[,'euclidian_distance'], main ="euclidian distance: control vs mild vs severe")
+boxplot(subset_control[,'average_directness'], subset_mild[,'average_directness'], subset_severe[,'average_directness'], main ="average_directness: control vs mild vs severe")
+boxplot(subset_control[,'mean_speed'], subset_mild[,'mean_speed'], subset_severe[,'mean_speed'], main ="mean_speed: control vs mild vs severe")
+boxplot(subset_control[,'stdev_velocity'], subset_mild[,'stdev_velocity'], subset_severe[,'stdev_velocity'], main ="stdev_velocity: control vs mild vs severe")
+boxplot(subset_control[,'forward_migration_index_x'], subset_mild[,'forward_migration_index_x'], subset_severe[,'forward_migration_index_x'], main ="forward_migration_index_x: control vs mild vs severe")
+boxplot(subset_control[,'forward_migration_index_y'], subset_mild[,'forward_migration_index_y'], subset_severe[,'forward_migration_index_y'], main ="forward_migration_index_y: control vs mild vs severe")
+#vergelijking van de features tussen de verschillende treatments
+
+
+# wilcox-test tussen accumulated distance van patient 122 bij treatment = PBS en treatment = CXCL1
+wilcox.test(subset_features2_CXCL1_122[,"accumulated_distance"], subset_features2_PBS_122[,"accumulated_distance"])
+
+# wilcox-test tussen accumulated distance van patient 122 bij treatment = PBS en treatment = fMLP
+wilcox.test(subset_features2_fMLP_122[,"accumulated_distance"], subset_features2_PBS_122[,"accumulated_distance"])
+
+# wilcox-test tussen accumulated distance van patient 122 bij treatment = PBS en treatment = CXCL8
+wilcox.test(subset_features2_CXCL8_122[,"accumulated_distance"], subset_features2_PBS_122[,"accumulated_distance"])
+
+#linear model
+http://www.sthda.com/english/articles/40-regression-analysis/168-multiple-linear-regression-in-r/
+https://www.statmethods.net/stats/regression.html
+#model is meer om een model te maken hoe de features (afhankelijk veranderlijke) afhangen van de treatments en de #patienten (onafhankelijk veranderlijken), maar hoe precies interpreteren?
+
+#set PBS as baseline for the model to compare with
+features2_relevelled <- within(features2, treatment <- relevel(treatment, ref = "PBS"))
+f = lm(accumulated_distance ~treatment+patientnumber, data = subset(features2_relevelled, accumulated_distance > 0))
+#niet de bedoeling om te splitsen op patiennummers
+
+#R^2 is zeer leeg -> zeer slecht model? -> om te voorspellen wel, maar niet als je het niet gebruikt om te voorspellen
+par(mfrow = c(2,2))
+plot(f)
+summary(f)
+confint(f, level = 0.95)
+hist(residuals(f))
+
+#error rate:
+sigma(f)/mean(features2$accumulated_distance)
+#116% error rate?
+
+
+f2 = lm(log(euclidian_distance) ~treatment+patientnumber, data = subset(features2_relevelled, euclidian_distance > 0))
+summary(f2)
+par(mfrow = c(2,2))
+plot(f2)
+confint(f2)
+residuals(f2)
+
+f3 = lm(average_directness~treatment+patientnumber, data = features2_relevelled)
+summary(f3)
+plot(f3)
+confint(f3)
+residuals(f3)
+
+f4 = lm(mean_speed~treatment+patientnumber, data = features2_relevelled)
+summary(f4)
+plot(f4)
+confint(f4)
+residuals(f4)
+
+f5 = lm(stdev_velocity~treatment+patientnumber, data = features2_relevelled)
+summary(f5)
+plot(f5)
+confint(f5)
+residuals(f5)
+
+
+
+#MDS
+#classical MDS
+#https://www.statmethods.net/advstats/mds.html
+condition = features2[,"treatment"] == "CXCL1"
+d = dist(features2[condition,])
+
+fit = cmdscale(d, eig = TRUE, k = 2)
+
+
+x <- fit$points[,1]
+y <- fit$points[,2]
+plot(x, y, xlab="Coordinate 1", ylab="Coordinate 2", 
+  main="Metric	MDS",	type="n")
+text(x, y, labels = row.names(features2), cex=.7)
+
+install.packages("MVar")
+library(MVar)
+subset1 = features2[features2[,"treatment"] == "CXCL1",]
+typeof(subset1)
+as.matrix(subset1)
+MDS(subset1)
+help(package = "MVar")
+
+??some.MDS
+getAnywhere('MVar')

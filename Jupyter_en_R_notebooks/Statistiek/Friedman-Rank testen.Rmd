@@ -1,0 +1,83 @@
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+#install.packages("plyr")
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#install.packages("car")
+library(car)
+
+#set PBS as baseline for the model to compare with
+features2_relevelled <- within(features2, treatment <- relevel(treatment, ref = "PBS"))
+
+#Friedman rank test per status met patiënt als blockingfactor
+
+#1. control
+
+condition = features2[,"status"] == "control"
+features2_control = features2[condition,]
+features2_control_relevelled = features2[condition,]
+features2_control_relevelled_niet0 = subset(features2_control_relevelled, accumulated_distance > 0)
+#1.1 accumulated_distance
+
+t = friedman.test(f, features2_relevelled[,"treatment"], as.factor(features2[,"patientnumber"]))
+
+features2_relevelled$treatment = as.factor(features2_relevelled$treatment)
+features2_relevelled$patientnumber = as.factor(features2_relevelled$patientnumber)
+t = friedman.test(accumulated_distance ~treatment | patientnumber, data = features2_control_relevelled_niet0)
+
+t = friedman.test(as.factor(features2_control[,"accumulated_distance"]), groups = as.factor(features2_control_relevelled[,"treatment"]), blocks = as.factor(features2_control[,"patientnumber"]), subset = features2[,"accumulated_distance"] > 0)
+table(as.factor(features2_control_relevelled[,"treatment"]), as.factor(features2_control[,"patientnumber"]))
+
+friedman.test(accumulated_distance ~treatment|patientnumber, data = subset(features2, accumulated_distance > 0))
+
+#Scheirer-Ray-Hare test proberen in de plaats (deze test heeft minder kans om de interactie significant te vinden):
+if(!require(rcompanion)){install.packages("rcompanion")}
+if(!require(FSA)){install.packages("FSA")}
+
+library(rcompanion)
+scheirerRayHare(accumulated_distance~treatment+patientnumber, data = subset(features2_control, accumulated_distance > 0))
+#Post-hoc test
+#order groups by median:
+condition = features2_control[,"treatment"] == 'CXCL1'
+median(features2_control[,"accumulated_distance"][condition])
+
+condition = features2_control[,"treatment"] == 'CXCL8'
+median(features2_control[,"accumulated_distance"][condition])
+
+condition = features2_control[,"treatment"] == 'fMLP'
+median(features2_control[,"accumulated_distance"][condition])
+
+condition = features2_control[,"treatment"] == 'PBS'
+median(features2_control[,"accumulated_distance"][condition])
+
+features2_control$treatment = factor(features2_control$treatment, levels = c("PBS", "CXCL8", "CXCL1", "fMLP"))
+levels(features2_control$treatment)
+#Dunn test
+library(FSA)
+dt = dunnTest(accumulated_distance~treatment, data = subset(features2_control, accumulated_distance > 0), method = "bh")
+dt
+
+
+
+
+#two-way ANOVA with robust estimation?
+if(!require(WRS2)){install.packages("WRS2")}
+library(WRS2)
+
+
+x = c(1:9792)
+features2[,"ID"] = x
+
+bwtrim(accumulated_distance~treatment+patientnumber, ID, subset(features2, accumulated_distance>0))
+
+
+#A heteroscedastic one-way repeated measures bootstrap ANOVA for trimmed means.
+rmanovab(subset(features2_control, accumulated_distance > 0)[,"accumulated_distance"], subset(features2_control, accumulated_distance > 0)[,"treatment"], subset(features2_control, accumulated_distance > 0)[,"patientnumber"])
+
+#A two-way ANOVA for trimmed means, M-estimators, or medians
+t2way(accumulated_distance~treatment+patientnumber+treatment:patientnumber, subset(features2_control, accumulated_distance>0))
+pbad2way(accumulated_distance~patientnumber+treatment+patientnumber:treatment, subset(features2_control, accumulated_distance>0), est = "mom", nboot = 5000)

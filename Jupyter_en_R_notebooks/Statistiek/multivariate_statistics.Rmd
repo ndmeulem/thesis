@@ -1,0 +1,102 @@
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+#install.packages("plyr")
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#install.packages("car")
+library(car)
+
+#set PBS as baseline for the model to compare with
+features2_relevelled <- within(features2, treatment <- relevel(treatment, ref = "PBS"))
+
+#check multivariate normality
+x.features2 = features2[,1:7] #enkel de numeric features meenemen
+x.features2.c = x.features2[features2$status=="control",]
+x.features2.m = x.features2[features2$status == "mild",]
+x.features2.s = x.features2[features2$status == "severe",]
+status = features2$status
+
+cor(x.features2, use = "complete.obs")
+cor(x.features2.c, use = "complete.obs")
+
+mahF = mahalanobis(x.features2.c, colMeans(x.features2.c), var(x.features2.c))
+
+summary(mahF)
+
+install.packages("devtools")
+devtools::install_github("martinSter/modi")
+
+library(modi)
+#mahalanobis voor dataframe met missing values, maar dan mogen de parameters center (colmean) en covariance matrix (var) ook geen Nan bevatten
+MDmiss(x.features2.c, colMeans(x.features2.c), var(x.features2.c))
+#werkt dus ook niet
+
+#nu de rijen verwijderen van die NaN waardes hebben
+
+str(x.features2.c)
+row_withNAN = complete.cases(x.features2.c)
+score = 0
+for (element in row_withNAN){
+  if(element == FALSE){
+  score += 1
+  }
+}
+score
+
+x.features2.c.noNAN = x.features2.c[row_withNAN,]
+mahF = mahalanobis(x.features2.c.noNAN, colMeans(x.features2.c.noNAN), var(x.features2.c.noNAN))
+summary(mahF)
+
+
+#QQ plot
+#de 7 komt van 7 features
+qqplot(qchisq(ppoints(mahF), df = 7), mahF, main = "QQ-plot control status", xlab = "expected", ylab = "observed") 
+qqline(mahF, distribution = function(p) qchisq(p, df = 7), col = 2) 
+
+#ziet er een exponentiele verdeling uit
+
+#log transformeren?? Waarschijnlijk mogen enkel lineaire transformaties gebeuren op de mahalanobis distance en dan kan log natuurlijk niet
+qqplot(qchisq(ppoints(log(mahF)), df = 7), log(mahF), main = "QQ-plot control status", xlab = "expected", ylab = "observed") 
+qqline(log(mahF), distribution = function(p) qchisq(p, df = 7), col = 2)
+
+# voor de andere twee statussen:
+
+# mild
+
+x.features2.m.noNAN = x.features2.m[complete.cases(x.features2.m),]
+mahF = mahalanobis(x.features2.m.noNAN, colMeans(x.features2.m.noNAN), var(x.features2.m.noNAN))
+summary(mahF)
+
+
+#QQ plot
+
+qqplot(qchisq(ppoints(mahF), df = 7), mahF, main = "QQ-plot mild status", xlab = "expected", ylab = "observed") 
+qqline(mahF, distribution = function(p) qchisq(p, df = 7), col = 2) 
+
+#severe
+
+x.features2.s.noNAN = x.features2.s[complete.cases(x.features2.s),]
+mahF = mahalanobis(x.features2.s.noNAN, colMeans(x.features2.s.noNAN), var(x.features2.s.noNAN))
+summary(mahF)
+residuals(mahF)
+
+#QQ plot
+
+qqplot(qchisq(ppoints(mahF), df = 7), mahF, main = "QQ-plot severe status", xlab = "expected", ylab = "observed") 
+qqline(mahF, distribution = function(p) qchisq(p, df = 7), col = 2) 
+
+
+
+#check for homoscedascity (variance-covariance matrix voor de drie statussen is dezelfde)
+BoxM.test(dataset=features2, testvar=c(1:7), groupvar=8)
+install.packages("biotools")
+library(biotools)
+features2.notNAN = features2[complete.cases(features2),]
+x.features2.notNAN = x.features2[complete.cases(x.features2),]
+boxM(x.features2.notNAN, features2.notNAN$status)
+#p-value -> kleiner dan 0.01, niet homoscedastisch
+
+#-> het is dus niet normaal verdeeld en niet homoscedastisch

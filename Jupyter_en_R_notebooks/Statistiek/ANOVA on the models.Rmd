@@ -1,0 +1,74 @@
+
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features1 = read.csv(file = "MDS data + features1", header = TRUE, fill = TRUE)
+features1_NAN = read.csv(file = "MDS data +features1 NAN", header = TRUE, fill = TRUE)
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+#install.packages("plyr")
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#install.packages("car")
+library(car)
+
+#set PBS as baseline for the model to compare with
+features2_relevelled <- within(features2, treatment <- relevel(treatment, ref = "PBS"))
+
+#1. accumulated_distance
+
+
+#2. euclidian distance
+#als je het niet expliciet zegt heeft R blijkbaar niet door dat patientnumber ook een factor is (met 9 levels (df+1))
+f = lm(log2(euclidian_distance) ~treatment+as.factor(patientnumber), data = subset(features2_relevelled, euclidian_distance > 0))
+summary(f)
+f.aov = aov(f)
+summary(f.aov)
+TukeyHSD(f.aov)
+
+#3. mean_speed
+
+#4.average_directness
+
+#5. stdev_velocity
+
+#6. forward_migration_index_x
+f = lm(forward_migration_index_x~treatment+as.factor(patientnumber), data = subset(features2_relevelled, forward_migration_index_x != 0))
+summary(f)
+par(mfrow = c(2,2))
+plot(f)
+f.aov = aov(f)
+summary(f.aov)
+TukeyHSD(f.aov)
+#https://en.wikipedia.org/wiki/Breusch%E2%80%93Pagan_test
+#https://datascienceplus.com/how-to-detect-heteroscedasticity-and-rectify-it/
+#Breusch Pagan test (check for homoscedascity of the residuals of the model) (p>0.05 -> heteroscedascity):
+#It is important in linear regression that there is no heteroscedascity
+ncvTest(f)    #p>0.01 -> heteroscedascity, maar op basis van rode lijn op plot residuals vs fitted: homoscedascity (want rode lijn is horizontaal), maar wel niet random verdeling van de punten
+
+  ##eens op status ipv op patientnummers:
+f = lm(forward_migration_index_x~treatment+status, data = subset(features2_relevelled, forward_migration_index_x != 0))
+summary(f)  
+hist(residuals(f))
+plot(f)
+f.aov = aov(f)
+summary(f.aov)
+TukeyHSD(f.aov)
+
+##is dit hier nu juist? Vergelijken binnen de disease statussen met de controle (->treatment)? of moet ik nu eigenlijk nog zelfs splitsen op ziektestatus?
+
+#7. forward migration index y
+f = lm(forward_migration_index_y~treatment+as.factor(patientnumber), data = subset(features2_relevelled, forward_migration_index_y != 0))
+summary(f)
+f.aov = aov(f)
+summary(f.aov)
+TukeyHSD(f.aov)
+
+  ##op status ipv op patientnummers:
+f = lm(forward_migration_index_y~treatment+status, data = subset(features2_relevelled, forward_migration_index_y != 0))
+summary(f)
+plot(f)
+f.aov = aov(f)
+summary(f.aov)
+TukeyHSD(f.aov)

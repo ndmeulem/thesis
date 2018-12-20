@@ -1,0 +1,762 @@
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+#install.packages("plyr")
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#install.packages("car")
+library(car)
+
+#set PBS as baseline for the model to compare with
+features2_relevelled <- within(features2, treatment <- relevel(treatment, ref = "PBS"))
+
+#write function to sample treatment within each patient
+patients  =c(122, 129, 164, 714, 722, 751, 805, 858, 859)
+patients_control = c(122, 129, 164)
+patients_mild = c(805, 858, 859)
+patients_severe = c(714, 722, 751)
+
+  #shuffle treatments within patient
+shuffle = function(dataset, number) {
+  A = subset(dataset, patientnumber == number)
+  newtreatment = sample(A[,'treatment'])
+  perm_data = A
+  perm_data$treatment = newtreatment
+  perm_data
+}
+test = shuffle(features2, 722)
+
+features2_control = subset(features2, status=="control")
+features2_control_relevelled <- within(features2_control, treatment <- relevel(treatment, ref = "PBS"))
+features2_mild = subset(features2, status=="mild")
+features2_mild_relevelled <- within(features2_mild, treatment <- relevel(treatment, ref = "PBS"))
+features2_severe = subset(features2, status=="severe")
+features2_severe_relevelled <- within(features2_severe, treatment <- relevel(treatment, ref = "PBS"))
+
+#1. controle
+#1.1 accumulated distance
+
+set.seed(1)
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$accumulated_distance ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+b
+
+# Standard Anova on these data
+mod1 <- lm(accumulated_distance ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+ANOVA
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+hist(FT, breaks = 100)
+
+treatment = permutated_dataset$treatment
+#post hoc test met multcomp library
+if(!require(multcomp)){install.packages("multcomp")}
+library(multcomp)
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#1.2 euclidian distance
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$euclidian_distance ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(euclidian_distance ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval          #0.00019996
+#post hoc
+library(multcomp)
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#1.3 average directness
+#run function over data, for number of times you want to do iteration
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$average_directness ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(average_directness ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#1.4 mean speed
+#run function over data, for number of times you want to do iteration
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$mean_speed ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(mean_speed ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#1.5 stdev velocity
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$stdev_velocity ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(stdev_velocity ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+
+
+
+#1.6 forward migration index x
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$forward_migration_index_x ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(forward_migration_index_x ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#1.6 forward migration index y
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_control){
+    newtreatment_dataset <- shuffle(features2_control, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$forward_migration_index_y ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(forward_migration_index_y ~ treatment + patientnumber, data = features2_control_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+
+
+
+
+
+#2. mild
+#2.1 accumulated distance
+
+set.seed(1)
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$accumulated_distance ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+b
+
+# Standard Anova on these data
+mod1 <- lm(accumulated_distance ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+ANOVA
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+hist(FT, breaks = 100)
+
+#post hoc test met multcomp library
+
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#2.2 euclidian distance
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$euclidian_distance ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(euclidian_distance ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval          #0.00019996
+#post hoc
+library(multcomp)
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#2.3 average directness
+#run function over data, for number of times you want to do iteration
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$average_directness ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(average_directness ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#2.4 mean speed
+#run function over data, for number of times you want to do iteration
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$mean_speed ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(mean_speed ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#2.5 stdev velocity
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$stdev_velocity ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(stdev_velocity ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+
+#2.6 forward migration index x
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$forward_migration_index_x ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(forward_migration_index_x ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#2.6 forward migration index y
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_mild){
+    newtreatment_dataset <- shuffle(features2_mild, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$forward_migration_index_y ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(forward_migration_index_y ~ treatment + patientnumber, data = features2_mild_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+
+
+
+
+#3. severe
+#3.1 accumulated distance
+
+set.seed(1)
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$accumulated_distance ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+b
+
+# Standard Anova on these data
+mod1 <- lm(accumulated_distance ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+ANOVA
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+hist(FT, breaks = 100)
+
+#post hoc test met multcomp library
+
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#3.2 euclidian distance
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$euclidian_distance ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(euclidian_distance ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval          
+#post hoc
+library(multcomp)
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#3.3 average directness
+#run function over data, for number of times you want to do iteration
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$average_directness ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(average_directness ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#3.4 mean speed
+#run function over data, for number of times you want to do iteration
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$mean_speed ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(mean_speed ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+
+#2.5 stdev velocity
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$stdev_velocity ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(stdev_velocity ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+
+#3.5 forward migration index x
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$forward_migration_index_x ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(forward_migration_index_x ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+sum(FT)
+sum(FT>=Ftreatment)
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
+
+#3.6 forward migration index y
+nreps <- 5000 
+FT <- numeric(nreps)    #Set up space to store F values as calculated.
+FP <- numeric(nreps) 
+for (i in 2:nreps) {
+  permutated_dataset = data.frame()
+  for (patient in patients_severe){
+    newtreatment_dataset <- shuffle(features2_severe, patient)
+    permutated_dataset = rbind(permutated_dataset, newtreatment_dataset)
+  }
+  mod2 <- lm(permutated_dataset$forward_migration_index_y ~ permutated_dataset$treatment + permutated_dataset$patientnumber)
+  b <- summary(aov(mod2))
+  FT[i] <- b[[1]]$"F value"[1]
+  FP[i] <- b[[1]]$"F value"[2]
+}
+
+# Standard Anova on these data
+mod1 <- lm(forward_migration_index_y ~ treatment + patientnumber, data = features2_severe_relevelled)
+ANOVA <- summary(aov(mod1))
+cat( " The standard ANOVA for these data follows ","\n")
+Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use
+Fpatientnumber <-  ANOVA[[1]]$"F value"[2]
+
+
+pval=(sum(FT>=Ftreatment)+1)/(nreps+1)
+pval
+
+#post hoc test
+model1.mcp<-glht(mod1,linfct=mcp(treatment="Tukey"))
+summary(model1.mcp)
