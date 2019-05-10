@@ -1066,7 +1066,7 @@ for (i in 2:nreps) {
 }
 
 # Standard Anova on these data
-mod1 <- lm(mean_speed ~ treatment + patientnumber, data = features2_relevelled)
+mod1 <- lm(stdev_velocity ~ treatment + patientnumber, data = features2_relevelled)
 ANOVA <- summary(aov(mod1))
 cat( " The standard ANOVA for these data follows ","\n")
 Ftreatment <-  ANOVA[[1]]$"F value"[1]   # Saving F values for future use

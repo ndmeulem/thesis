@@ -48,10 +48,23 @@ skewness(features2[,"stdev_velocity"])
 skewness(features2[,"forward_migration_index_x"], na.rm = TRUE)
 skewness(features2[,"forward_migration_index_y"], na.rm = TRUE)
 
+#kurtosis
+kurtosis(features2[,"accumulated_distance"])   #right skewed
+kurtosis(features2[,"euclidian_distance"])     #right skewed
+kurtosis(features2[,"mean_speed"])             #right skewed
+kurtosis(features2[,"average_directness"], na.rm = TRUE) 
+kurtosis(features2[,"stdev_velocity"])
+kurtosis(features2[,"forward_migration_index_x"], na.rm = TRUE)
+kurtosis(features2[,"forward_migration_index_y"], na.rm = TRUE)
+
+https://www.investopedia.com/terms/p/platykurtic.asp
+
 #outliers(features2[,"euclidian_distance"])
 
 #set PBS as baseline for the model to compare with
 features2_relevelled <- within(features2, treatment <- relevel(treatment, ref = "PBS"))
+
+https://medium.com/@TheDataGyan/day-8-data-transformation-skewness-normalization-and-much-more-4c144d370e55
 
 #Transformations for positively skewed data (voor elk van de vier positively skewed features):
 #1. log tranformation (with different bases (e.g. 10, 2, e))  (0 waardes worden eruit gegooid)
@@ -66,36 +79,75 @@ summary(f)
 #confint(f, level = 0.95)
 hist(residuals(f))
 
+
 #1.1.1 log transformation with base 10
 
 f = lm(log10(accumulated_distance) ~treatment+as.factor(patientnumber), data = subset(features2_relevelled, accumulated_distance > 0))
-par(mfrow = c(2,2))
-plot(f)
+par(mfrow = c(1,1))
+#plot(f)
 summary(f)
 #confint(f, level = 0.95)
-hist(residuals(f))
+#hist(residuals(f))
   ## nog niet helemaal normaal verdeeld
+qqnorm(residuals(f), main = "accumulated_distance - log10")
+qqline(residuals(f))
+
+log10(features2[,"accumulated_distance"])
+
+qqnorm(log10(features2[,"accumulated_distance"]), main = "accumulated_distance - log10")
+qqline(log10(features2[,"accumulated_distance"]))
+
+shapiro.test(residuals(f)[0:5000])
   
 #1.1.2 log transformation with base 2
 
 f1 = lm(log2(accumulated_distance) ~treatment+as.factor(patientnumber), data = subset(features2_relevelled, accumulated_distance > 0))
 par(mfrow = c(2,2))
-plot(f1)
+#plot(f1)
 summary(f1)
 #confint(f1, level = 0.95)
-hist(residuals(f1))
+#hist(residuals(f1))
   ## nog niet helemaal normaal verdeeld
+qqnorm(residuals(f1), main = "accumulated_distance - log2")
+qqline(residuals(f1))
+shapiro.test(residuals(f1)[0:5000])
 
-  
 #1.1.3 log transformation with base e
 
 f2 = lm(log(accumulated_distance) ~treatment+as.factor(patientnumber), data = subset(features2_relevelled, accumulated_distance > 0))
 par(mfrow = c(2,2))
-plot(f2)
+#plot(f2)
 summary(f2)
 #confint(f2, level = 0.95)
-hist(residuals(f2))
+#hist(residuals(f2))
   ##nog niet helemaal normaal verdeeld
+qqnorm(residuals(f2), main = "accumulated_distance - ln")
+qqline(residuals(f2))
+shapiro.test(residuals(f2)[0:5000])
+
+
+HIER
+f3 = lm((accumulated_distance)^(1/2) ~treatment+as.factor(patientnumber), data = subset(features2_relevelled, accumulated_distance > 0))
+par(mfrow = c(1,1))
+#plot(f1)
+summary(f1)
+#confint(f1, level = 0.95)
+hist(residuals(f1))
+shapiro.test(residuals(f3)[0:5000])
+ad.test(residuals(f3))
+  ##ook nog helemaal niet normaal verdeeld
+  ##mss eerst log transformatie en dan sqrt?
+par(mfrow = c(2,2))
+qqnorm(residuals(f), main = "accumulated_distance - log10")
+qqline(residuals(f)) 
+qqnorm(residuals(f1), main = "accumulated_distance - log2")
+qqline(residuals(f1))  
+qqnorm(residuals(f2), main = "accumulated_distance - ln")
+qqline(residuals(f2))
+qqnorm(residuals(f3), main = "accumulated_distance - sqrt")
+qqline(residuals(f3))
+
+
 
 #1.2 eudlicidian distance
   ## no transformation
@@ -378,6 +430,14 @@ features2_severe = subset(features2, status == "severe")
 features2_control_relevelled <- within(features2_control, treatment <- relevel(treatment, ref = "PBS"))
 features2_mild_relevelled <- within(features2_mild, treatment <- relevel(treatment, ref = "PBS"))
 features2_severe_relevelled <- within(features2_severe, treatment <- relevel(treatment, ref = "PBS"))
+
+#QQ-plots per disease status
+qqnorm(features2_mild_relevelled[,"mean_speed"], main = "mean_speed - mild disease status")
+qqline(features2_mild_relevelled[,"mean_speed"]) 
+qqnorm(features2_control_relevelled[,"mean_speed"], main = "mean_speed - control status")
+qqline(features2_control_relevelled[,"mean_speed"]) 
+qqnorm(features2_severe_relevelled[,"mean_speed"], main = "mean_speed - severe disease status")
+qqline(features2_severe_relevelled[,"mean_speed"]) 
 
 
 #2. accumulated distance

@@ -38,6 +38,12 @@ subset_mild = features2[condition2,]
 condition3 = features2[,"status"] == "severe"
 subset_severe = features2[condition3,]
 
+#opsplitsen per treatment
+condition = (features2[,"treatment"] == "PBS")
+subset_PSB = features2[condition,]
+subset_PBS_niet0 = subset(subset_PSB, subset_PSB[,"mean_speed"] > 0)
+
+dagoTest(subset_PBS_niet0[,"mean_speed"])
 
 patientnumber = features2[,"patientnumber"]
 condition = (features2[,"patientnumber"] == 122 & features2[,"treatment"] == "CXCL1")
@@ -53,8 +59,24 @@ condition4 = (features2[,"patientnumber"] == 122 & features2[,"treatment"] == "C
 subset_features2_CXCL8_122 = features2[condition4,]
 
 #test for normality
+
+mu = mean(features2[,"accumulated_distance"])
+sigma = sd(features2[,"accumulated_distance"])
+distribution1 = rnorm(mu, sigma)
+
+
+par(mfrow = c(1,1))
+qqnorm(features2[,"accumulated_distance"], main = "accumulated_distance", distribution = distribution1)
+qqline(features2[,"accumulated_distance"])
 qqnorm(features2[,"accumulated_distance"], main = "accumulated_distance")
 qqline(features2[,"accumulated_distance"])
+
+
+qqplot(features2[,"accumulated_distance"], distribution1)
+
+distribution2 = rnorm(1000, 0, 1)
+qqplot(features2[,"accumulated_distance"], distribution2)
+
 
 qqnorm(features2[,"euclidian_distance"], main = "euclidian_distance")
 qqline(features2[,"euclidian_distance"])
@@ -65,6 +87,8 @@ qqline(features2[,"average_directness"])
 
 qqnorm(features2[,"mean_speed"], main = "mean_speed")
 qqline(features2[,"mean_speed"])
+
+par(mfrow = c(2, 2))
 
 qqnorm(features2[,"stdev_velocity"], main = "stdev_velocity")
 qqline(features2[,"stdev_velocity"])
@@ -78,6 +102,7 @@ qqline(features2[,"forward_migration_index_y"])
 shapiro.test(features2[,"forward_migration_index_x"][0:5000])  #kan maar 5000 samples aan
 #install.packages('nortest')
 library(nortest)
+library(moments)
 #anderson darling normality test:
 ad.test(features2[,"forward_migration_index_x"])
   #zeggen alletwee dat deze feature niet normaal is verdeeld
@@ -88,6 +113,10 @@ ad.test(features2[,"stdev_velocity"])
 
 shapiro.test(features2[,"forward_migration_index_y"][0:5000])
 ad.test(features2[,"forward_migration_index_y"])
+  #zeggen alletwee dat deze feature niet normaal verdeeld is
+
+shapiro.test(features2[,"euclidian_distance"][0:5000])
+ad.test(features2[,"euclidian_distance"])
   #zeggen alletwee dat deze feature niet normaal verdeeld is
 
 #wat als je de nul eruit haalt?
@@ -128,13 +157,20 @@ qqnorm(subset_mild[,"mean_speed"], main = "mean_speed_mild")
 qqline(subset_mild[,"mean_speed"])
 
 #histograms
-hist(features2[,"accumulated_distance"])
-hist(features2[,"euclidian_distance"])
-hist(features2[,"mean_speed"])
-hist(features2[,"average_directness"])
+hist(features2[,"accumulated_distance"], breaks = 25, main = "accumulated distance", xlab = "accumulated distance")
+hist(features2[,"euclidian_distance"], breaks = 25, main = "Euclidian distance", xlab = "Euclidian distance")
+hist(features2[,"mean_speed"], breaks = 25, main = "mean speed", xlab = "mean speed")
+hist(features2[,"average_directness"], breaks = 25, main = "average directness", xlab = "average directness")
 hist(features2[,"stdev_velocity"])
 hist(features2[,"forward_migration_index_x"])
 hist(features2[,"forward_migration_index_y"])
+
+par(mfrow = c(2,2))
+hist(subset(features2, forward_migration_index_x != 0)[,"forward_migration_index_x"], main = 'forward migration index x', xlab = "forward migration index x")
+hist(subset(features2, forward_migration_index_y != 0)[,"forward_migration_index_y"], main = 'forward migration index y', xlab = "forward migration index y")
+hist(subset(features2, stdev_velocity != 0)[,"stdev_velocity"], main = 'stdev_velocity', xlab = "stdev velocity")
+
+
 
 
 library(UsingR)
@@ -143,6 +179,7 @@ simple.hist.and.boxplot(features2[,"accumulated_distance"], main = "accumulated_
 
 #boxplots
 #vergelijking van de features tussen de verschillende ziektestatussen
+par(mfrow = c(1,1))
 boxplot(subset_control[,'accumulated_distance'], subset_mild[,'accumulated_distance'], subset_severe[,'accumulated_distance'], main ="Accumulated distance: control vs mild vs severe")
 boxplot(subset_control[,'euclidian_distance'], subset_mild[,'euclidian_distance'], subset_severe[,'euclidian_distance'], main ="euclidian distance: control vs mild vs severe")
 boxplot(subset_control[,'average_directness'], subset_mild[,'average_directness'], subset_severe[,'average_directness'], main ="average_directness: control vs mild vs severe")

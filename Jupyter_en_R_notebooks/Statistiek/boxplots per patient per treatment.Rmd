@@ -1,0 +1,171 @@
+
+
+getwd()
+setwd("C:/Users/ninad/Documents/Thesis/Jupyter_en_R_notebooks/Statistiek")
+
+features1 = read.csv(file = "MDS data + features1", header = TRUE, fill = TRUE)
+features1_NAN = read.csv(file = "MDS data +features1 NAN", header = TRUE, fill = TRUE)
+features2 = read.csv(file = "Dataset_features_2", header = TRUE, fill = TRUE)
+
+library(plyr)
+features2 = rename(features2, c("accumulated_euclidian_distance"="euclidian_distance"))
+
+#make subsets
+#per patient
+
+condition = features2[,"patientnumber"] == 122
+subset_122 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 129
+subset_129 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 164
+subset_164 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 714
+subset_714 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 722
+subset_722 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 751
+subset_751 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 805
+subset_805 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 858
+subset_858 = features2[condition,]
+
+condition = features2[,"patientnumber"] == 859
+subset_859 = features2[condition,]
+
+#per patient per treatment
+#patient 122
+condition = subset_122[,"treatment"] == "CXCL1"
+subset_122_CXCL1 = subset_122[condition,]
+
+condition = subset_122[,"treatment"] == "CXCL8"
+subset_122_CXCL8 = subset_122[condition,]
+
+condition = subset_122[,"treatment"] == "fMLP"
+subset_122_fMLP = subset_122[condition,]
+
+condition = subset_122[,"treatment"] == "PBS"
+subset_122_PBS = subset_122[condition,]
+  
+
+
+#patient 164
+
+condition = subset_164[,"treatment"] == "CXCL1"
+subset_164_CXCL1 = subset_164[condition,]
+
+condition = subset_164[,"treatment"] == "CXCL8"
+subset_164_CXCL8 = subset_164[condition,]
+
+condition = subset_164[,"treatment"] == "fMLP"
+subset_164_fMLP = subset_164[condition,]
+
+condition = subset_164[,"treatment"] == "PBS"
+subset_164_PBS = subset_164[condition,]
+
+#patient 129
+
+condition = subset_129[,"treatment"] == "CXCL1"
+subset_129_CXCL1 = subset_129[condition,]
+
+condition = subset_129[,"treatment"] == "CXCL8"
+subset_129_CXCL8 = subset_129[condition,]
+
+condition = subset_129[,"treatment"] == "fMLP"
+subset_129_fMLP = subset_129[condition,]
+
+condition = subset_129[,"treatment"] == "PBS"
+subset_129_PBS = subset_129[condition,]
+
+#patient 714
+
+condition = subset_714[,"treatment"] == "CXCL1"
+subset_714_CXCL1 = subset_714[condition,]
+
+condition = subset_714[,"treatment"] == "CXCL8"
+subset_714_CXCL8 = subset_714[condition,]
+
+condition = subset_714[,"treatment"] == "fMLP"
+subset_714_fMLP = subset_714[condition,]
+
+condition = subset_714[,"treatment"] == "PBS"
+subset_714_PBS = subset_714[condition,]
+
+#patient 722
+
+condition = subset_722[,"treatment"] == "CXCL1"
+subset_722_CXCL1 = subset_722[condition,]
+
+condition = subset_722[,"treatment"] == "CXCL8"
+subset_722_CXCL8 = subset_722[condition,]
+
+condition = subset_722[,"treatment"] == "fMLP"
+subset_722_fMLP = subset_722[condition,]
+
+condition = subset_722[,"treatment"] == "PBS"
+subset_722_PBS = subset_722[condition,]
+
+#patient 751
+
+condition = subset_751[,"treatment"] == "CXCL1"
+subset_751_CXCL1 = subset_751[condition,]
+
+condition = subset_751[,"treatment"] == "CXCL8"
+subset_751_CXCL8 = subset_751[condition,]
+
+condition = subset_751[,"treatment"] == "fMLP"
+subset_751_fMLP = subset_751[condition,]
+
+condition = subset_751[,"treatment"] == "PBS"
+subset_751_PBS = subset_751[condition,]
+
+#patient 805
+
+condition = subset_805[,"treatment"] == "CXCL1"
+subset_805_CXCL1 = subset_805[condition,]
+
+condition = subset_805[,"treatment"] == "CXCL8"
+subset_805_CXCL8 = subset_805[condition,]
+
+condition = subset_805[,"treatment"] == "fMLP"
+subset_805_fMLP = subset_805[condition,]
+
+condition = subset_805[,"treatment"] == "PBS"
+subset_805_PBS = subset_805[condition,]
+
+#patient 858
+
+condition = subset_858[,"treatment"] == "CXCL1"
+subset_858_CXCL1 = subset_858[condition,]
+
+condition = subset_858[,"treatment"] == "CXCL8"
+subset_858_CXCL8 = subset_858[condition,]
+
+condition = subset_858[,"treatment"] == "fMLP"
+subset_858_fMLP = subset_858[condition,]
+
+condition = subset_858[,"treatment"] == "PBS"
+subset_858_PBS = subset_858[condition,]
+
+#patient 859
+
+condition = subset_859[,"treatment"] == "CXCL1"
+subset_859_CXCL1 = subset_859[condition,]
+
+condition = subset_859[,"treatment"] == "CXCL8"
+subset_859_CXCL8 = subset_859[condition,]
+
+condition = subset_859[,"treatment"] == "fMLP"
+subset_859_fMLP = subset_859[condition,]
+
+condition = subset_859[,"treatment"] == "PBS"
+subset_859_PBS = subset_859[condition,]
+
+#plots per patient en per treatment van alle features
